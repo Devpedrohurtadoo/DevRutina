@@ -142,9 +142,9 @@ ${bullet([
         if (!c.isGymDay)
           return `Hoy: **${c.gym}**. Descanso activo: paseo 30-45 min.\n¿Entreno ligero? Dime "sin gym".`;
         return `**Hoy: ${c.gym}**\n${bullet([
-          'Compuestos 4×8-10, descanso 2-3 min',
-          'Aislamiento 3×12-15, usa el temporizador',
-          'Progresión: +1-2 kg o +1 rep/semana',
+          'Compuestos PESADOS 5-8 reps (5×5 banca/sentadilla)',
+          'Descanso 3 min en compuestos, 90 seg aislamiento',
+          'Progresión: +2.5 kg o +1 rep/semana — sin 4×12 en todo',
         ])}\n\nDespertaste a las ${c.wake}.`;
       },
     },

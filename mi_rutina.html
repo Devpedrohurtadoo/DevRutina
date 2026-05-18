@@ -10,6 +10,8 @@
 <meta name="theme-color" content="#6366f1">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <meta name="mobile-web-app-capable" content="yes">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -234,6 +236,7 @@ body {
   margin-bottom: 4px;
 }
 .exercise-name { font-size: 13px; font-weight: 600; flex: 1; }
+.exercise-sets.heavy { color: var(--amber); font-weight: 700; }
 .exercise-sets {
   font-family: 'DM Mono', monospace;
   font-size: 11px;
@@ -650,7 +653,7 @@ hl { color: var(--accent2); font-weight: 600; }
       <circle class="ring-progress" id="ring-progress" cx="32" cy="32" r="28"/>
     </svg>
     <div>
-      <div class="ring-label">Hábitos <span id="ring-val">0/7</span></div>
+      <div class="ring-label">Hábitos <span id="ring-val">0/8</span></div>
       <div class="ring-sub">Racha: <span id="streak-val">0</span> días 🔥</div>
     </div>
   </div>
@@ -698,49 +701,56 @@ hl { color: var(--accent2); font-weight: 600; }
   <div class="sec-title">Hábitos de hoy <span>✓</span></div>
   <div class="card">
     <div class="card-body" style="padding-top:8px;">
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">💧 3 litros de agua</div>
           <div class="habit-sub">Empieza con 500ml al despertar</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🦷 Higiene bucal completa</div>
           <div class="habit-sub">Rascador + cepillo + hilo + enjuague</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">✨ Skincare mañana</div>
           <div class="habit-sub">Limpiador → Vit C → SPF</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">☀️ 10 minutos de sol</div>
+          <div class="habit-sub">Vitamina D + aspecto más sano. SPF ya aplicado en skincare.</div>
+        </div>
+      </div>
+      <div class="habit-item">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🥩 Proteína: 160g mínimo</div>
           <div class="habit-sub">Distribuida en todas las comidas</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🏋️ Entreno de hoy</div>
           <div class="habit-sub" id="habit-gym-day">Ver sección Gym</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🛡️ Antitranspirante de noche</div>
           <div class="habit-sub">Axilas secas antes de dormir</div>
         </div>
       </div>
-      <div class="habit-item" onclick="toggleHabit(this)">
+      <div class="habit-item" >
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">😴 8-9 horas de sueño</div>
@@ -892,93 +902,82 @@ hl { color: var(--accent2); font-weight: 600; }
     </div>
   </div>
 
-  <div class="info imp"><div class="info-icon">📋</div><div>Push·Pull·Pierna·Push·Pull | Lu·Ma·Mi·Ju·Vi | Sábado y domingo descanso activo</div></div>
+    <div class="info imp"><div class="info-icon">💪</div><div><b>PPL Hipertrofia máxima</b> — compuestos pesados 5-8 reps, progresión semanal. Lu-Vi entreno | Sáb-Dom descanso activo.</div></div>
 
   <div class="day-tabs" id="gym-tabs">
-    <button class="day-tab active" onclick="showGymDay(0)">Lun Push</button>
-    <button class="day-tab" onclick="showGymDay(1)">Mar Pull</button>
-    <button class="day-tab" onclick="showGymDay(2)">Mié Pierna</button>
-    <button class="day-tab" onclick="showGymDay(3)">Jue Push2</button>
-    <button class="day-tab" onclick="showGymDay(4)">Vie Pull2</button>
+    <button type="button" class="day-tab active" data-action="gym-day" data-day="0">Lun Push</button>
+    <button type="button" class="day-tab" data-action="gym-day" data-day="1">Mar Pull</button>
+    <button type="button" class="day-tab" data-action="gym-day" data-day="2">Mié Pierna</button>
+    <button type="button" class="day-tab" data-action="gym-day" data-day="3">Jue Push2</button>
+    <button type="button" class="day-tab" data-action="gym-day" data-day="4">Vie Pull2</button>
   </div>
 
-  <!-- LUNES -->
   <div class="gym-day active" id="gym-0">
-    <div class="day-pill">💪 Lunes <span class="day-focus">PUSH · Pecho · Hombros · Tríceps</span></div>
+    <div class="day-pill">💪 Lunes <span class="day-focus">PUSH · Pecho / Hombros / Tríceps</span></div>
+    
     <div class="card"><div class="card-body">
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press de banca plano (barra)</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Ejercicio rey del pecho. Baja 3 seg lento, sube explosivo. Descansa 2-3 min entre series. Agarre ligeramente más ancho que hombros.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado mancuernas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Banco a 30-45°. Trabaja parte alta del pecho. Clave para verse grande de frente. Rango completo.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Aperturas pecho cable/máquina</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Tensión constante. Siente el estiramiento en el pecho. Peso ligero, forma perfecta.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press militar barra (hombros)</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">De pie o sentado. Core activado. No arquees la lumbar. Hombros y tríceps.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Elevaciones laterales</div><div class="exercise-sets">4×12-15</div></div><div class="exercise-tip">Pesos ligeros, forma perfecta. Brazos anchos = cintura visualmente más estrecha. El truco visual más potente.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Tríceps en polea (barra/cuerda)</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Codos fijos al cuerpo. Extensión completa. Alterna entre barra recta y cuerda.</div></div>
-      <div class="info ok" style="margin-top:4px;"><div class="info-icon">🔥</div><div>Calentamiento: 5 min bici/cinta + 1 serie ligera de cada ejercicio principal antes de empezar.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press banca plano (barra)</div><div class="exercise-sets heavy">5×5</div></div><div class="exercise-tip">PESADO. Rey del pecho. Descanso 3 min. Sube 2.5 kg/semana si completas las 5×5.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado mancuernas</div><div class="exercise-sets">4×6-8</div></div><div class="exercise-tip">Pecho alto = te ves grande de frente. Banco 30°.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press militar (barra)</div><div class="exercise-sets">4×6-8</div></div><div class="exercise-tip">Hombros anchos. De pie, core firme.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Fondos en paralelas</div><div class="exercise-sets">3×6-8</div></div><div class="exercise-tip">Tríceps + pecho. Lastra cuando puedas.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Elevaciones laterales</div><div class="exercise-sets">3×10</div></div><div class="exercise-tip">Único aislamiento con más reps. Sin balanceo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensión tríceps polea</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Codos quietos. Brazos grandes = más fuerza en press.</div></div>
+    </div></div>
+  </div>  <div class="gym-day" id="gym-1">
+    <div class="day-pill">🔙 Martes <span class="day-focus">PULL · Espalda / Bíceps</span></div>
+    
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Dominadas lastradas</div><div class="exercise-sets heavy">4×5-8</div></div><div class="exercise-tip">Espalda ancha. Jalón pesado 4×6-8 si no llegas — nunca 12 reps.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo con barra</div><div class="exercise-sets heavy">4×6</div></div><div class="exercise-tip">Espalda gruesa. Peso pesado, técnica perfecta.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo máquina o cable</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Squeeze 1 seg en el pico.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Face pull</div><div class="exercise-sets">3×15</div></div><div class="exercise-tip">Salud de hombros. Obligatorio.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl barra EZ</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Bíceps pesado. Sin trampa.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl martillo</div><div class="exercise-sets">2×8</div></div><div class="exercise-tip">Grosor del brazo.</div></div>
+    </div></div>
+  </div>  <div class="gym-day" id="gym-2">
+    <div class="day-pill">🦵 Miércoles <span class="day-focus">PIERNA</span></div>
+    <div class="info warn"><div class="info-icon">⚠️</div><div>Pierna = testosterona y GH. Día sagrado.</div></div>
+    
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Sentadilla libre</div><div class="exercise-sets heavy">5×5</div></div><div class="exercise-tip">PESADO. Descanso 3 min.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Peso muerto rumano</div><div class="exercise-sets">4×6-8</div></div><div class="exercise-tip">Femorales y glúteo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Prensa</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Más peso controlado.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl femoral</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Isquios. Baja lento.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Gemelos de pie</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">PESADO. No 20 reps ligeras.</div></div>
+    </div></div>
+  </div>  <div class="gym-day" id="gym-3">
+    <div class="day-pill">💪 Jueves <span class="day-focus">PUSH 2</span></div>
+    
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado barra</div><div class="exercise-sets heavy">4×6</div></div><div class="exercise-tip">Pecho alto otra vez.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press plano mancuernas</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Rango completo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press mancuernas sentado</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Hombros completos.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Cruces en polea</div><div class="exercise-sets">2×10</div></div><div class="exercise-tip">Solo bombeo, 2 series.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press cerrado / JM press</div><div class="exercise-sets">3×6-8</div></div><div class="exercise-tip">Tríceps para fuerza en press.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensión tríceps cuerda</div><div class="exercise-sets">2×10</div></div><div class="exercise-tip">Finisher.</div></div>
+    </div></div>
+  </div>  <div class="gym-day" id="gym-4">
+    <div class="day-pill">🔙 Viernes <span class="day-focus">PULL 2</span></div>
+    
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Peso muerto o rack pull</div><div class="exercise-sets heavy">3×5</div></div><div class="exercise-tip">Muy pesado. Técnica perfecta.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Jalón al pecho ancho</div><div class="exercise-sets">4×6-8</div></div><div class="exercise-tip">PESADO. No 12 reps.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo mancuerna 1 brazo</div><div class="exercise-sets">3×8 c/lado</div></div><div class="exercise-tip">Máximo rango por lado.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Face pull</div><div class="exercise-sets">3×15</div></div><div class="exercise-tip">Hombros sanos.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl inclinado</div><div class="exercise-sets">3×8</div></div><div class="exercise-tip">Estiramiento máximo del bíceps.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl predicador</div><div class="exercise-sets">2×8</div></div><div class="exercise-tip">Sin trampa.</div></div>
     </div></div>
   </div>
-
-  <!-- MARTES -->
-  <div class="gym-day" id="gym-1">
-    <div class="day-pill">🔙 Martes <span class="day-focus">PULL · Espalda · Bíceps</span></div>
-    <div class="card"><div class="card-body">
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Dominadas o jalón al pecho</div><div class="exercise-sets">4×6-10</div></div><div class="exercise-tip">El mejor ejercicio para espalda ancha. Si no llegas a 6 dominadas, usa jalón en máquina o banda elástica de ayuda. Agarre prono, ancho.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo con barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Tirón hacia el ombligo, espalda recta (no doblada), codos pegados. Peso moderado con buena técnica. Da espalda gruesa.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo polea baja agarre neutro</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Complementa el remo con barra. Más control y conexión mente-músculo con la espalda baja.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl bíceps con barra</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Codos fijos, no hagas trampa con el cuerpo. Sube 1 seg, baja 2 seg. Aprieta en la cima.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl martillo mancuernas</div><div class="exercise-sets">3×12 c/lado</div></div><div class="exercise-tip">Agarre neutro (como un martillo). Desarrolla el braquial y braquiorradial = bíceps visualmente más grueso.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl concentrado</div><div class="exercise-sets">2×12-15 c/lado</div></div><div class="exercise-tip">Sentado, codo en la rodilla. Máximo pico de bíceps. Finisher perfecto. Siente la contracción.</div></div>
-    </div></div>
-  </div>
-
-  <!-- MIÉRCOLES -->
-  <div class="gym-day" id="gym-2">
-    <div class="day-pill">🦵 Miércoles <span class="day-focus">PIERNA COMPLETA</span></div>
-    <div class="info warn"><div class="info-icon">⚠️</div><div>Pierna = 50% de tu masa muscular. Genera más testosterona y GH que cualquier otro entrenamiento. Dale todo aunque sea 1 día.</div></div>
-    <div class="card"><div class="card-body">
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Sentadilla libre con barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Rey de los ejercicios. Aprende técnica antes de meter peso. Pies a la anchura de hombros, punta ligeramente hacia afuera. Baja hasta que muslos paralelos al suelo.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Prensa de piernas</div><div class="exercise-sets">4×10-12</div></div><div class="exercise-tip">Complementa la sentadilla. Puedes mover más peso. Pies en el centro, no bloquees las rodillas arriba.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensiones de cuádriceps</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Aislamiento puro de cuádriceps. Pausa 1 seg arriba, baja lento. Importante para definición frontal.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl femoral tumbado</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Isquiotibiales. Equilibra trabajo y protege rodillas de lesiones. Baja lento.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Hip thrust o peso muerto rumano</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Hip thrust para glúteo y femoral. Peso muerto rumano si prefieres más isquio. Cualquiera de los dos.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Gemelos de pie en máquina</div><div class="exercise-sets">4×15-20</div></div><div class="exercise-tip">Recorrido completo: baja los talones al máximo, sube en punta de pie máximo. Pausa 1 seg arriba. Los gemelos responden mejor a más repeticiones.</div></div>
-    </div></div>
-  </div>
-
-  <!-- JUEVES -->
-  <div class="gym-day" id="gym-3">
-    <div class="day-pill">💪 Jueves <span class="day-focus">PUSH 2 · Variante</span></div>
-    <div class="card"><div class="card-body">
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Esta semana enfocamos pecho alto. Banco a 30°, agarre medio. La parte superior del pecho da volumen enorme.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Aperturas banco plano mancuernas</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Estiramiento máximo en pecho. Peso muy ligero. La sensación muscular es lo que importa, no el peso.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press Arnold mancuernas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">El favorito de Arnold. Empieza con palmas hacia ti, gira al subir. Trabaja los 3 cabezas del deltoides.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Elevaciones frontales alternas</div><div class="exercise-sets">3×12 c/lado</div></div><div class="exercise-tip">Deltoides anterior. Alterna brazos para más control. Hombros redondos y estéticos.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Fondos en paralelas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Cuerpo recto = más tríceps. Ligeramente inclinado adelante = más pecho. Ambas variantes son buenas.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensiones tríceps sobre cabeza</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Con mancuerna o barra EZ. Estira la cabeza larga del tríceps. Fundamental para brazos grandes de verdad.</div></div>
-    </div></div>
-  </div>
-
-  <!-- VIERNES -->
-  <div class="gym-day" id="gym-4">
-    <div class="day-pill">🔙 Viernes <span class="day-focus">PULL 2 · Variante</span></div>
-    <div class="card"><div class="card-body">
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Jalón agarre estrecho/neutro</div><div class="exercise-sets">4×10-12</div></div><div class="exercise-tip">Agarre neutro o supino. Activa más bíceps y parte baja de dorsales. Tira llevando codos hacia caderas.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo mancuerna 1 brazo</div><div class="exercise-sets">4×10 c/lado</div></div><div class="exercise-tip">Corrige desequilibrios entre lados. Máximo rango. Rodilla y mano en el banco. Tira el codo hacia el techo.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Face pull en polea alta</div><div class="exercise-sets">3×15-20</div></div><div class="exercise-tip">Cuerda a la altura de la cara, tira hacia la frente separando la cuerda. Rotadores externos y deltoides posterior. Salud de hombros y postura.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl barra EZ o Z</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Menos estrés en muñecas que barra recta. Movimiento completo. Agarre medio.</div></div>
-      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl polea baja (finisher)</div><div class="exercise-sets">3×15-20</div></div><div class="exercise-tip">Tensión constante en todo el recorrido a diferencia de mancuernas. Quema final. Descansa poco entre series.</div></div>
-      <div class="info ok" style="margin-top:4px;"><div class="info-icon">🏆</div><div>Sábado y domingo: paseo, fútbol suave, natación, bici. El músculo crece en el descanso.</div></div>
-    </div></div>
-  </div>
-
   <div class="card" style="margin-top:14px;">
-    <div class="card-header"><div class="card-icon ci-amber">📐</div><div><div class="card-title">Reglas de oro</div></div></div>
+    <div class="card-header"><div class="card-icon ci-amber">📐</div><div><div class="card-title">Reglas hipertrofia rápida</div></div></div>
     <div class="card-body">
-      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Progresión de cargas semanal</div><div class="step-desc">Cada semana intenta +1-2kg o +1 rep. Sin progresión no hay músculo. Anótalo en el móvil.</div></div></div>
-      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Técnica > Peso siempre</div><div class="step-desc">Con 2 meses de experiencia la técnica perfecta da más músculo que mucho peso. Sin excepciones.</div></div></div>
-      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">RIR 1-2 (casi al fallo)</div><div class="step-desc">Para cuando te quedan 1-2 repeticiones en el tanque. Más seguro y más volumen total.</div></div></div>
-      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Descanso entre series: 90-150 seg</div><div class="step-desc">Ejercicios compuestos: 2-3 min. Ejercicios de aislamiento: 60-90 seg. Usa el temporizador.</div></div></div>
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Compuestos 5-8 reps PESADOS</div><div class="step-desc">5×5 banca y sentadilla. 4×6 remo y dominadas. Eso construye músculo real.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Progresión cada semana</div><div class="step-desc">+2.5 kg o +1 rep. Sin progresión no hay músculo.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">RIR 1-2 en la última serie</div><div class="step-desc">Casi al fallo. La última rep debe costar.</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Descanso 3 min compuestos</div><div class="step-desc">90 seg aislamiento. Usa el temporizador.</div></div></div>
     </div>
   </div>
-</div>
+
 
 <!-- ========= SECTION: DIETA ========= -->
 <div class="section" id="sec-dieta">
@@ -992,13 +991,13 @@ hl { color: var(--accent2); font-weight: 600; }
   </div></div>
 
   <div class="day-tabs">
-    <button class="day-tab active" onclick="showDietDay(0)">Día 1</button>
-    <button class="day-tab" onclick="showDietDay(1)">Día 2</button>
-    <button class="day-tab" onclick="showDietDay(2)">Día 3</button>
-    <button class="day-tab" onclick="showDietDay(3)">Día 4</button>
-    <button class="day-tab" onclick="showDietDay(4)">Día 5</button>
-    <button class="day-tab" onclick="showDietDay(5)">Día 6</button>
-    <button class="day-tab" onclick="showDietDay(6)">Día 7</button>
+    <button type="button" class="day-tab active" data-action="diet-day" data-day="0">Día 1</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="1">Día 2</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="2">Día 3</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="3">Día 4</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="4">Día 5</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="5">Día 6</button>
+    <button type="button" class="day-tab" data-action="diet-day" data-day="6">Día 7</button>
   </div>
 
   <div class="diet-day active" id="diet-0">

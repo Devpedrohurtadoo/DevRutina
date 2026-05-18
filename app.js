@@ -1,6 +1,6 @@
 /* Mi Rutina — lógica principal */
 const STORAGE = 'mr_';
-const HABIT_COUNT = 7;
+const HABIT_COUNT = 8;
 const RING_CIRC = 175.9;
 const memStore = {};
 
@@ -10,7 +10,7 @@ let timerSeconds = 120;
 let timerInterval = null;
 let timerRunning = false;
 
-const gymDays = ['Push — pecho, hombros y tríceps', 'Pull — espalda y bíceps', 'Pierna completa', 'Push 2 — variante', 'Pull 2 — variante', 'Descanso activo', 'Descanso activo'];
+const gymDays = ['Push hipertrofia (5×5 banca)', 'Pull hipertrofia (remo 4×6)', 'Pierna (5×5 sentadilla)', 'Push 2 (inclinado 4×6)', 'Pull 2 (peso muerto 3×5)', 'Descanso activo', 'Descanso activo'];
 
 function pad(n) { return n < 10 ? '0' + n : n; }
 
@@ -87,7 +87,11 @@ function confirmWake() {
   updateWakeUI();
   buildTimelines();
   updateAhoraToca();
-  if (typeof StepCounter !== 'undefined') StepCounter.start();
+  updateTrackers();
+  if (typeof StepCounter !== 'undefined') {
+    const pr = StepCounter.start();
+    if (pr && typeof pr.then === 'function') pr.catch(function () {});
+  }
 }
 
 function browseAppNow() {
@@ -205,7 +209,8 @@ function buildTimelines() {
     [fmt(w, 0), '💧 Despierta + agua', 'Bebe 400-500ml de agua inmediatamente.'],
     [fmt(w, 5), '🦷 Higiene bucal completa', 'Rascador → cepillo 2 min → hilo → clorhexidina.'],
     [fmt(w, 15), '✨ Skincare mañana', 'Limpiador → Vitamina C → SPF 30.'],
-    [fmt(w, 22), '🚿 Ducha', 'Jabón antibacterial en axilas 30-40 seg.'],
+    [fmt(w, 20), '☀️ 10 minutos de sol', 'Vitamina D + aspecto. Ya llevas SPF.'],
+    [fmt(w, 32), '🚿 Ducha', 'Jabón antibacterial en axilas 30-40 seg.'],
     [fmt(w, 35), '🍳 Desayuno proteico', 'Ver sección Dieta.'],
   ];
   const mt = document.getElementById('morning-timeline');
@@ -329,6 +334,7 @@ function updateAhoraToca() {
   const wd = now.getDay();
   let msg = '';
   if (diff < 30) msg = '💧 Agua + higiene bucal + skincare';
+  else if (diff < 90) msg = '☀️ 10 min de sol (con SPF ya puesto)';
   else if (diff < 120) msg = '🍳 Desayuno proteico';
   else if (diff < 300) msg = '🥗 Comida o media mañana';
   else if (wd >= 1 && wd <= 5 && diff < 480) msg = '🏋️ Pre-gym o gym — ' + gymDays[wd];
@@ -543,6 +549,9 @@ function bindEvents() {
     if (act === 'save-measures') { e.preventDefault(); saveMeasures(); return; }
     if (act === 'save-goals') { e.preventDefault(); saveGoals(); return; }
     if (act === 'coach-send') { e.preventDefault(); sendCoachMessage(); return; }
+    if (act === 'reset-habits') { e.preventDefault(); resetHabits(); return; }
+    if (act === 'gym-day') { e.preventDefault(); showGymDay(parseInt(t.getAttribute('data-day'), 10)); return; }
+    if (act === 'diet-day') { e.preventDefault(); showDietDay(parseInt(t.getAttribute('data-day'), 10)); return; }
     if (act === 'nav') { e.preventDefault(); showSection(t.getAttribute('data-section')); return; }
     if (act === 'mas-item') { e.preventDefault(); showSection(t.getAttribute('data-section')); return; }
   });
@@ -568,8 +577,15 @@ function bindEvents() {
     el.onclick = function () { toggleHabit(el); };
   });
 
-  const resetBtn = document.querySelector('[data-action="reset-habits"]');
-  if (resetBtn) resetBtn.onclick = function (e) { e.preventDefault(); resetHabits(); };
+  const timerPreset = document.getElementById('timer-preset');
+  if (timerPreset) {
+    timerPreset.addEventListener('change', function () {
+      if (!timerRunning) {
+        timerSeconds = parseInt(timerPreset.value, 10) || 120;
+        timerDisplay();
+      }
+    });
+  }
 }
 
 function init() {
@@ -577,6 +593,7 @@ function init() {
   setHeroDate();
   tick();
   setInterval(tick, 10000);
+  setInterval(function () { updateAhoraToca(); updateWakeUI(); }, 60000);
   loadHabits();
   updateTrackers();
   updateRing();
