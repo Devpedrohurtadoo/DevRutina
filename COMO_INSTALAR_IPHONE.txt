@@ -1,28 +1,20 @@
 MI RUTINA — Instalar en iPhone (100% GRATIS)
 ============================================
 
-IMPORTANTE: Para que funcione como app (icono, pantalla completa, sin internet),
-los archivos deben abrirse desde Safari con una URL web, NO solo el archivo suelto.
+URL: https://devpedrohurtadoo.github.io/Routine/
 
-OPCIÓN A — La más fácil (iCloud / AirDrop)
-------------------------------------------
-1. Copia toda la carpeta "mi_rutina" a iCloud Drive en tu iPhone
-2. Abre "mi_rutina.html" con Safari (mantén pulsado → Compartir → Safari)
-3. Toca Compartir ↑ → "Añadir a pantalla de inicio"
-4. ¡Listo! Tendrás el icono "Mi Rutina"
-
-OPCIÓN B — GitHub Pages (gratis, recomendado si usas PC)
---------------------------------------------------------
-1. Crea cuenta en github.com
-2. Sube la carpeta mi_rutina a un repositorio
-3. Settings → Pages → activa GitHub Pages
-4. Abre la URL en Safari del iPhone y "Añadir a pantalla de inicio"
+1. Abre la URL en SAFARI (no Chrome)
+2. Toca Compartir ↑ → "Añadir a pantalla de inicio"
+3. ¡Listo! Icono "Mi Rutina" en tu pantalla
 
 USO DIARIO
 ----------
-• A las 00:00 todo se reinicia (hábitos, agua, proteína)
+• A las 00:00 todo se reinicia (hábitos, agua, proteína, pasos)
 • Al despertar: pulsa "¡Me he despertado!" — la rutina empieza desde ESA hora
+• Pasos: pulsa "Activar contador" una vez (permiso movimiento). Cuenta al caminar con la app abierta
+• Pasos 24h desde Salud: crea Atajo iOS que abra:
+  https://devpedrohurtadoo.github.io/Routine/mi_rutina.html?sync_steps=PASOS_DEL_DIA
 • Coach: escribe "estoy fuera de casa" para plan adaptado
-• Ajustes (Más → Ajustes): cambia metas de proteína/agua y modo del día
+• Más → Ajustes: metas de proteína/agua
 
 Todo es privado: los datos solo están en tu iPhone.

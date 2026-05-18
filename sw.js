@@ -1,8 +1,14 @@
-const CACHE = 'mi-rutina-v2';
+const CACHE = 'mi-rutina-v4';
 const ASSETS = [
+  './',
+  './index.html',
   './mi_rutina.html',
   './coach.js',
+  './step-counter.js',
+  './app.js',
   './manifest.webmanifest',
+  './icon-192.png',
+  './icon-512.png',
   'https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap'
 ];
 

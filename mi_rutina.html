@@ -11,7 +11,6 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
-<script src="coach.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -511,332 +510,237 @@ body {
 /* Highlight text */
 hl { color: var(--accent2); font-weight: 600; }
 
-/* Progress ring */
-.progress-ring-wrap { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
-.progress-ring { position:relative; width:64px; height:64px; flex-shrink:0; }
-.progress-ring svg { transform:rotate(-90deg); }
-.progress-ring-bg { fill:none; stroke:var(--bg3); stroke-width:5; }
-.progress-ring-fill { fill:none; stroke:var(--green); stroke-width:5; stroke-linecap:round; transition:stroke-dashoffset 0.4s; }
-.progress-ring-text {
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; font-weight:700; color:var(--green);
-}
-
-/* Trackers */
-.tracker { margin-bottom:12px; }
-.tracker-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.tracker-label { font-size:13px; font-weight:600; }
-.tracker-val { font-family:'DM Mono',monospace; font-size:13px; color:var(--accent2); }
-.tracker-bar { height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; margin-bottom:10px; }
-.tracker-fill { height:100%; border-radius:4px; transition:width 0.3s; }
-.tracker-btns { display:flex; gap:6px; flex-wrap:wrap; }
-.tracker-btn {
-  padding:8px 12px; border-radius:10px; border:1px solid var(--border2);
-  background:var(--bg3); color:var(--text); font-size:12px; font-weight:500;
-  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s;
-}
-.tracker-btn:active { background:var(--accent); border-color:var(--accent); }
-.tracker-btn.sm { padding:6px 10px; font-size:11px; }
-
-/* Now card */
-.now-card {
-  background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(45,212,191,0.1));
-  border:1px solid rgba(99,102,241,0.25);
-  border-radius:var(--r); padding:16px; margin-bottom:16px;
-}
-.now-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
-.now-title { font-size:17px; font-weight:700; margin-bottom:4px; }
-.now-time { font-family:'DM Mono',monospace; font-size:12px; color:var(--accent2); margin-bottom:6px; }
-.now-desc { font-size:12px; color:var(--muted); line-height:1.5; }
-
-/* Timer */
-.timer-box {
-  background:var(--bg3); border-radius:var(--r2); padding:16px;
-  text-align:center; margin-bottom:12px;
-}
-.timer-display {
-  font-family:'DM Mono',monospace; font-size:42px; font-weight:500;
-  color:var(--accent2); margin:8px 0;
-}
-.timer-presets { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px; }
-.timer-preset {
-  padding:8px 14px; border-radius:20px; border:1px solid var(--border2);
-  background:var(--card); color:var(--muted); font-size:12px; font-weight:600;
-  cursor:pointer; font-family:'DM Sans',sans-serif;
-}
-.timer-preset.active { background:var(--accent); border-color:var(--accent); color:#fff; }
-.timer-actions { display:flex; gap:8px; justify-content:center; }
-.timer-action {
-  padding:10px 24px; border-radius:12px; border:none; font-size:14px; font-weight:600;
-  cursor:pointer; font-family:'DM Sans',sans-serif;
-}
-.timer-start { background:var(--green); color:#fff; }
-.timer-stop { background:var(--coral); color:#fff; }
-
-/* Gym log */
-.gym-log-input {
-  width:100%; padding:10px 12px; background:var(--bg3); border:1px solid var(--border);
-  border-radius:10px; color:var(--text); font-family:'DM Mono',monospace; font-size:13px;
-  margin-top:6px; outline:none;
-}
-.gym-log-input:focus { border-color:var(--accent); }
-.gym-log-input::placeholder { color:var(--muted); }
-.log-entry {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:8px 0; border-bottom:1px solid var(--border); font-size:12px;
-}
-.log-entry:last-child { border-bottom:none; }
-.log-date { color:var(--muted); font-family:'DM Mono',monospace; font-size:11px; }
-.log-val { font-weight:600; color:var(--accent2); }
-
-/* Form inputs */
-.form-row { display:flex; gap:8px; margin-bottom:10px; }
-.form-input {
-  flex:1; padding:10px 12px; background:var(--bg3); border:1px solid var(--border);
-  border-radius:10px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px;
-  outline:none; min-width:0;
-}
-.form-input:focus { border-color:var(--accent); }
-.form-btn {
-  padding:10px 16px; background:var(--accent); border:none; border-radius:10px;
-  color:#fff; font-weight:600; font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif;
-  white-space:nowrap;
-}
-.streak-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  background:rgba(245,158,11,0.15); color:var(--amber);
-  font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
-}
-.chart-bars { display:flex; align-items:flex-end; gap:4px; height:80px; margin-top:12px; }
-.chart-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
-.chart-bar {
-  width:100%; background:var(--accent); border-radius:4px 4px 0 0;
-  min-height:4px; transition:height 0.3s;
-}
-.chart-lbl { font-size:9px; color:var(--muted); font-family:'DM Mono',monospace; }
-
-.wake-bar { padding: 0 0 4px; }
-.wake-big-btn {
-  width: 100%; padding: 14px; border: none; border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent), #4f46e5);
-  color: #fff; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif;
-  cursor: pointer; box-shadow: 0 4px 20px rgba(99,102,241,0.35);
-}
-.wake-big-btn.done { background: var(--bg3); color: var(--green); border: 1px solid var(--green); box-shadow: none; }
-.wake-status { font-size: 11px; color: var(--muted); text-align: center; margin-top: 6px; font-family: 'DM Mono', monospace; }
 .wake-overlay {
-  position: fixed; inset: 0; z-index: 200; background: rgba(10,10,15,0.97);
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(10,10,15,0.97);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 24px; text-align: center;
 }
-.wake-overlay.hidden { display: none; }
+.wake-overlay.hidden { display: none !important; visibility: hidden; pointer-events: none; }
 .wake-overlay h2 { font-size: 22px; margin-bottom: 8px; }
-.wake-overlay p { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.5; max-width: 320px; }
-.install-banner {
-  background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
-  border-radius: var(--r); padding: 14px; margin-bottom: 14px; font-size: 12px; line-height: 1.6;
+.wake-overlay p { color: var(--muted); font-size: 14px; margin-bottom: 20px; line-height: 1.5; max-width: 320px; }
+.wake-overlay-actions { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
+.wake-big-btn {
+  width: 100%; padding: 16px; border-radius: 14px; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; font-size: 16px; font-weight: 700; cursor: pointer;
 }
-.install-banner b { color: var(--accent2); }
-.mode-pill {
-  display: inline-block; font-size: 10px; font-weight: 700; padding: 4px 10px;
-  border-radius: 20px; margin-left: 6px;
+.wake-secondary-btn {
+  width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text); font-size: 14px; font-weight: 600; cursor: pointer;
 }
-.mode-normal { background: rgba(34,197,94,0.15); color: var(--green); }
-.mode-away { background: rgba(245,158,11,0.15); color: var(--amber); }
-.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 180px); min-height: 400px; }
-.chat-messages {
-  flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 10px;
-}
-.chat-msg {
-  max-width: 88%; padding: 12px 14px; border-radius: 16px; font-size: 13px; line-height: 1.55;
-  white-space: pre-wrap; word-break: break-word;
-}
-.chat-msg.bot { align-self: flex-start; background: var(--card); border: 1px solid var(--border); }
-.chat-msg.user { align-self: flex-end; background: var(--accent); color: #fff; }
-.chat-msg b { color: var(--accent2); font-weight: 600; }
-.chat-msg.user b { color: #fff; }
-.chat-input-row {
-  display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border);
-}
-.chat-input {
-  flex: 1; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border2);
-  background: var(--bg3); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
-  outline: none;
-}
-.chat-send {
-  padding: 12px 18px; border: none; border-radius: 14px; background: var(--accent);
-  color: #fff; font-weight: 600; cursor: pointer; font-size: 14px;
-}
-.quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.quick-chip {
-  padding: 8px 12px; border-radius: 20px; border: 1px solid var(--border2);
-  background: var(--bg3); color: var(--muted); font-size: 11px; cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-}
+.wake-bar { padding: 8px 0 4px; }
+.wake-info { font-size: 12px; color: var(--accent2); margin-top: 4px; }
+.snooze-panel { display: none; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.snooze-panel.open { display: flex; }
+.snooze-btn { padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg3); color: var(--muted); font-size: 12px; cursor: pointer; }
+.ring-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+.ring-svg { width: 64px; height: 64px; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--bg3); stroke-width: 6; }
+.ring-progress { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 175.9; stroke-dashoffset: 175.9; transition: stroke-dashoffset 0.4s; }
+.ring-label { font-size: 13px; font-weight: 600; }
+.ring-sub { font-size: 11px; color: var(--muted); }
+.stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.stat-box { background: var(--bg3); border-radius: 10px; padding: 10px; text-align: center; border: 1px solid var(--border); }
+.stat-val { font-size: 16px; font-weight: 700; color: var(--accent2); }
+.stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+.ahora-card { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(45,212,191,0.08)); border: 1px solid rgba(99,102,241,0.25); border-radius: var(--r); padding: 14px 16px; margin-bottom: 14px; }
+.ahora-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.ahora-text { font-size: 15px; font-weight: 600; }
+.tracker { margin-bottom: 12px; }
+.tracker-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
+.tracker-label { font-weight: 600; }
+.tracker-val { color: var(--muted); font-size: 12px; }
+.tracker-bar { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+.tracker-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.tracker-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.tracker-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-size: 12px; cursor: pointer; }
+.tracker-btn.sm { font-size: 11px; padding: 4px 8px; }
+.steps-hint { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+.steps-status { font-size: 11px; color: var(--teal); margin-top: 4px; }
+.coach-chat { max-height: 340px; overflow-y: auto; margin-bottom: 12px; }
+.coach-msg { padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+.coach-msg.user { background: var(--accent); color: #fff; margin-left: 20%; }
+.coach-msg.bot { background: var(--bg3); border: 1px solid var(--border); margin-right: 10%; }
+.coach-input-row { display: flex; gap: 8px; }
+.coach-input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-family: inherit; font-size: 14px; }
+.coach-send-btn { padding: 12px 16px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-weight: 600; cursor: pointer; }
+.coach-quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.coach-quick-btn { padding: 6px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--card2); color: var(--muted); font-size: 11px; cursor: pointer; }
+.timer-box { text-align: center; padding: 16px; }
+.timer-display { font-family: 'DM Mono', monospace; font-size: 48px; font-weight: 500; color: var(--accent2); }
+.timer-btns { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+.timer-btn { padding: 10px 20px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); cursor: pointer; font-weight: 600; }
 .mas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mas-tile {
-  background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
-  padding: 20px 14px; text-align: center; cursor: pointer; transition: background 0.15s;
-}
-.mas-tile:active { background: var(--card2); }
-.mas-tile-icon { font-size: 28px; margin-bottom: 8px; }
-.mas-tile-lbl { font-size: 13px; font-weight: 600; }
-.back-bar {
-  display: none; align-items: center; gap: 8px; margin-bottom: 12px;
-  font-size: 14px; color: var(--accent2); cursor: pointer; font-weight: 600;
-}
-.back-bar.visible { display: flex; }
-body.standalone .install-banner { display: none; }
-.nav-btn .nav-icon { font-size: 20px; }
-.nav-btn { font-size: 9px; }
+.mas-item { padding: 20px 16px; border-radius: var(--r); border: 1px solid var(--border); background: var(--card); text-align: center; cursor: pointer; }
+.mas-item:active { background: var(--card2); }
+.mas-icon { font-size: 28px; margin-bottom: 6px; }
+.mas-label { font-size: 13px; font-weight: 600; }
+.back-bar { display: none; position: sticky; top: 0; z-index: 99; background: var(--bg2); padding: 10px 16px; border-bottom: 1px solid var(--border); }
+.back-bar.visible { display: block; }
+.back-btn { background: none; border: none; color: var(--accent2); font-size: 14px; cursor: pointer; font-weight: 600; }
+.log-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.goal-input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); margin-bottom: 8px; font-size: 14px; }
+.save-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--accent); color: #fff; font-weight: 600; cursor: pointer; margin-top: 8px; }
 
 </style>
 </head>
 <body>
 
-<div id="wake-overlay" class="wake-overlay">
+<div id="wake-overlay" class="wake-overlay hidden">
   <h2>🌙 Nuevo día</h2>
-  <p>Todo se reinició a las 00:00. Cuando te despiertes, pulsa el botón para calcular tu rutina, comidas, gym y skincare desde esa hora.</p>
-  <button class="wake-big-btn" onclick="confirmWake()">☀️ ¡Me he despertado!</button>
+  <p id="wake-overlay-text">Cuando te despiertes activamos tu rutina desde esa hora. O entra ahora y confirma después.</p>
+  <div class="wake-overlay-actions">
+    <button type="button" class="wake-big-btn" data-action="wake">☀️ ¡Me he despertado!</button>
+    <button type="button" class="wake-secondary-btn" data-action="snooze-toggle">🕐 Me despierto en un rato</button>
+    <button type="button" class="wake-secondary-btn" data-action="browse">📱 Usar la app ahora</button>
+  </div>
+  <div id="snooze-panel" class="snooze-panel">
+    <button type="button" class="snooze-btn" data-action="snooze" data-min="15">15 min</button>
+    <button type="button" class="snooze-btn" data-action="snooze" data-min="30">30 min</button>
+    <button type="button" class="snooze-btn" data-action="snooze" data-min="60">1 hora</button>
+    <button type="button" class="snooze-btn" data-action="snooze" data-min="120">2 horas</button>
+  </div>
 </div>
+
+<div id="back-bar" class="back-bar"><button type="button" class="back-btn" data-action="nav" data-section="mas">← Volver</button></div>
 
 <div class="header">
   <div class="header-top">
     <div class="header-title">Mi <span>Rutina</span></div>
     <div class="time-display" id="clock">00:00</div>
   </div>
-  <div class="wake-bar">
-    <button class="wake-big-btn" id="wake-btn" onclick="confirmWake()">☀️ ¡Me he despertado!</button>
-    <div class="wake-status" id="wake-status">Pulsa al despertar para iniciar tu día</div>
+  <div id="wake-bar" class="wake-bar" style="display:none;">
+    <button type="button" class="wake-big-btn" data-action="wake" id="wake-btn">☀️ ¡Me he despertado!</button>
+    <div class="wake-info" id="wake-info"></div>
   </div>
 </div>
 
 <!-- ========= SECTION: HOY ========= -->
 <div class="section active" id="sec-hoy">
-  <div class="install-banner" id="install-banner">
-    <b>📱 Instalar en iPhone (gratis):</b> Safari → Compartir ↑ → <b>Añadir a pantalla de inicio</b>. Funciona sin internet.
-  </div>
   <div class="hero">
-    <div class="hero-greeting" id="hero-greeting">Buenas 👋</div>
+    <div class="hero-greeting">Buenas 👋</div>
     <div class="hero-name">Tu día de hoy</div>
     <div class="hero-date" id="hero-date">Cargando...</div>
-    <div style="margin-bottom:10px;"><span class="streak-badge" id="streak-badge">🔥 0 días seguidos</span></div>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-val" id="stat-habits">0%</div>
-        <div class="hero-stat-lbl">Hábitos</div>
+        <div class="hero-stat-val">16</div>
+        <div class="hero-stat-lbl">Años</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val" id="stat-water">0L</div>
-        <div class="hero-stat-lbl">Agua</div>
+        <div class="hero-stat-val">2M</div>
+        <div class="hero-stat-lbl">En gym</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-val" id="stat-protein">0g</div>
-        <div class="hero-stat-lbl">Proteína</div>
+        <div class="hero-stat-val">1.80</div>
+        <div class="hero-stat-lbl">Altura</div>
       </div>
     </div>
   </div>
 
-  <div class="now-card" id="now-card">
-    <div class="now-label">Ahora toca</div>
-    <div class="now-title" id="now-title">—</div>
-    <div class="now-time" id="now-time">—</div>
-    <div class="now-desc" id="now-desc">Calculando tu siguiente paso...</div>
+  
+  <div class="ahora-card">
+    <div class="ahora-title">Ahora toca</div>
+    <div class="ahora-text" id="ahora-toca">Confirma tu despertar para ver qué toca ahora.</div>
   </div>
 
-  <div class="sec-title">Seguimiento <span>diario</span></div>
-  <div class="card">
+  <div class="ring-wrap">
+    <svg class="ring-svg" viewBox="0 0 64 64">
+      <circle class="ring-bg" cx="32" cy="32" r="28"/>
+      <circle class="ring-progress" id="ring-progress" cx="32" cy="32" r="28"/>
+    </svg>
+    <div>
+      <div class="ring-label">Hábitos <span id="ring-val">0/7</span></div>
+      <div class="ring-sub">Racha: <span id="streak-val">0</span> días 🔥</div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-val" id="stat-water">0L</div><div class="stat-lbl">Agua</div></div>
+    <div class="stat-box"><div class="stat-val" id="stat-protein">0g</div><div class="stat-lbl">Proteína</div></div>
+    <div class="stat-box"><div class="stat-val" id="stat-steps">0</div><div class="stat-lbl">Pasos</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
     <div class="card-body">
       <div class="tracker">
-        <div class="tracker-header">
-          <span class="tracker-label">💧 Agua</span>
-          <span class="tracker-val" id="water-val">0 / 3000 ml</span>
-        </div>
+        <div class="tracker-header"><span class="tracker-label">💧 Agua</span><span class="tracker-val" id="water-val">0L / 3L</span></div>
         <div class="tracker-bar"><div class="tracker-fill" id="water-fill" style="width:0%;background:var(--blue);"></div></div>
         <div class="tracker-btns">
-          <button class="tracker-btn" onclick="addWater(250)">+250ml</button>
-          <button class="tracker-btn" onclick="addWater(500)">+500ml</button>
-          <button class="tracker-btn sm" onclick="addWater(-250)">−250</button>
-          <button class="tracker-btn sm" onclick="setWater(3000)">✓ Meta</button>
+          <button type="button" class="tracker-btn" data-action="water" data-ml="250">+250ml</button>
+          <button type="button" class="tracker-btn" data-action="water" data-ml="500">+500ml</button>
+          <button type="button" class="tracker-btn" data-action="water" data-ml="1000">+1L</button>
         </div>
       </div>
       <div class="divider"></div>
       <div class="tracker">
-        <div class="tracker-header">
-          <span class="tracker-label">🥩 Proteína</span>
-          <span class="tracker-val" id="protein-val">0 / 160 g</span>
-        </div>
+        <div class="tracker-header"><span class="tracker-label">🥩 Proteína</span><span class="tracker-val" id="protein-val">0g / 160g</span></div>
         <div class="tracker-bar"><div class="tracker-fill" id="protein-fill" style="width:0%;background:var(--green);"></div></div>
         <div class="tracker-btns">
-          <button class="tracker-btn" onclick="addProtein(20)">+20g</button>
-          <button class="tracker-btn" onclick="addProtein(30)">+30g</button>
-          <button class="tracker-btn" onclick="addProtein(40)">+40g</button>
-          <button class="tracker-btn sm" onclick="addProtein(-20)">−20</button>
+          <button type="button" class="tracker-btn" data-action="protein" data-g="20">+20g</button>
+          <button type="button" class="tracker-btn" data-action="protein" data-g="30">+30g</button>
+          <button type="button" class="tracker-btn" data-action="protein" data-g="40">+40g</button>
         </div>
+      </div>
+      <div class="divider"></div>
+      <div class="tracker">
+        <div class="tracker-header"><span class="tracker-label">👟 Pasos</span><span class="tracker-val" id="steps-val">0 / 10.000</span></div>
+        <div class="tracker-bar"><div class="tracker-fill" id="steps-fill" style="width:0%;background:var(--teal);"></div></div>
+        <div class="tracker-btns">
+          <button type="button" class="tracker-btn" id="steps-toggle-btn" data-action="steps-toggle">▶ Activar contador</button>
+        </div>
+        <div class="steps-status" id="steps-status"></div>
+        <p class="steps-hint">Automático con el sensor al caminar (app abierta). Para pasos 24h desde Salud: Atajo iOS → abrir URL con ?sync_steps=TUS_PASOS</p>
       </div>
     </div>
   </div>
 
   <div class="sec-title">Hábitos de hoy <span>✓</span></div>
-  <div class="progress-ring-wrap">
-    <div class="progress-ring">
-      <svg width="64" height="64" viewBox="0 0 64 64">
-        <circle class="progress-ring-bg" cx="32" cy="32" r="28"/>
-        <circle class="progress-ring-fill" id="habit-ring" cx="32" cy="32" r="28"
-          stroke-dasharray="175.9" stroke-dashoffset="175.9"/>
-      </svg>
-      <div class="progress-ring-text" id="habit-pct">0%</div>
-    </div>
-    <div style="flex:1;font-size:12px;color:var(--muted);line-height:1.5;">
-      Se guardan automáticamente y se reinician cada medianoche.
-    </div>
-  </div>
   <div class="card">
     <div class="card-body" style="padding-top:8px;">
-      <div class="habit-item" data-habit="0" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">💧 3 litros de agua</div>
           <div class="habit-sub">Empieza con 500ml al despertar</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="1" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🦷 Higiene bucal completa</div>
           <div class="habit-sub">Rascador + cepillo + hilo + enjuague</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="2" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">✨ Skincare mañana</div>
           <div class="habit-sub">Limpiador → Vit C → SPF</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="3" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🥩 Proteína: 160g mínimo</div>
           <div class="habit-sub">Distribuida en todas las comidas</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="4" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🏋️ Entreno de hoy</div>
           <div class="habit-sub" id="habit-gym-day">Ver sección Gym</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="5" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">🛡️ Antitranspirante de noche</div>
           <div class="habit-sub">Axilas secas antes de dormir</div>
         </div>
       </div>
-      <div class="habit-item" data-habit="6" onclick="toggleHabit(this)">
+      <div class="habit-item" onclick="toggleHabit(this)">
         <div class="habit-check"></div>
         <div class="habit-text">
           <div class="habit-title">😴 8-9 horas de sueño</div>
@@ -844,7 +748,29 @@ body.standalone .install-banner { display: none; }
         </div>
       </div>
     </div>
-    <button class="reset-btn" onclick="resetHabits()">Reiniciar hábitos del día</button>
+    <button class="reset-btn" data-action="reset-habits">Reiniciar hábitos del día</button>
+  </div>
+</div>
+
+
+<!-- ========= SECTION: COACH ========= -->
+<div class="section" id="sec-coach">
+  <div class="sec-title">Coach <span>IA</span></div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-purple">🤖</div>
+      <div><div class="card-title">Tu coach personal</div><div class="card-sub">Gym, dieta, skincare, fuera de casa</div></div>
+    </div>
+    <div class="card-body">
+      <div id="coach-quick" class="coach-quick"></div>
+      <div id="coach-chat" class="coach-chat">
+        <div class="coach-msg bot">¡Hola! Pregúntame lo que necesites. Prueba: <strong>"estoy fuera de casa"</strong> o <strong>"¿qué comer ahora?"</strong></div>
+      </div>
+      <div class="coach-input-row">
+        <input type="text" id="coach-input" class="coach-input" placeholder="Escribe tu pregunta..." autocomplete="off">
+        <button type="button" class="coach-send-btn" data-action="coach-send">→</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -947,6 +873,25 @@ body.standalone .install-banner { display: none; }
 <div class="section" id="sec-gym">
   <div class="sec-title">Gym <span>PPL</span></div>
 
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-amber">⏱️</div><div><div class="card-title">Temporizador de descanso</div><div class="card-sub">Entre series</div></div></div>
+    <div class="card-body timer-box">
+      <div class="timer-display" id="timer-display">2:00</div>
+      <select id="timer-preset" style="margin:8px 0;padding:8px;border-radius:8px;background:var(--bg3);color:var(--text);border:1px solid var(--border);">
+        <option value="60">60 seg</option>
+        <option value="90">90 seg</option>
+        <option value="120" selected>2 min</option>
+        <option value="150">2.5 min</option>
+        <option value="180">3 min</option>
+      </select>
+      <div class="timer-btns">
+        <button type="button" class="timer-btn" data-action="timer-start">▶</button>
+        <button type="button" class="timer-btn" data-action="timer-pause">⏸</button>
+        <button type="button" class="timer-btn" data-action="timer-reset">↺</button>
+      </div>
+    </div>
+  </div>
+
   <div class="info imp"><div class="info-icon">📋</div><div>Push·Pull·Pierna·Push·Pull | Lu·Ma·Mi·Ju·Vi | Sábado y domingo descanso activo</div></div>
 
   <div class="day-tabs" id="gym-tabs">
@@ -1025,33 +970,6 @@ body.standalone .install-banner { display: none; }
   </div>
 
   <div class="card" style="margin-top:14px;">
-    <div class="card-header"><div class="card-icon ci-teal">⏱️</div><div><div class="card-title">Temporizador de descanso</div><div class="card-sub">Entre series</div></div></div>
-    <div class="card-body">
-      <div class="timer-box">
-        <div class="timer-presets">
-          <button class="timer-preset" onclick="setTimerPreset(90,this)">90s</button>
-          <button class="timer-preset active" onclick="setTimerPreset(120,this)">2 min</button>
-          <button class="timer-preset" onclick="setTimerPreset(150,this)">2:30</button>
-          <button class="timer-preset" onclick="setTimerPreset(180,this)">3 min</button>
-        </div>
-        <div class="timer-display" id="timer-display">2:00</div>
-        <div class="timer-actions">
-          <button class="timer-action timer-start" id="timer-btn" onclick="toggleTimer()">Iniciar</button>
-          <button class="timer-action timer-stop" onclick="resetTimer()">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header"><div class="card-icon ci-blue">📝</div><div><div class="card-title">Registro de hoy</div><div class="card-sub">Pesos y repeticiones</div></div></div>
-    <div class="card-body">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Ej: Press banca 60kg x8 x8 x7</div>
-      <textarea class="gym-log-input" id="gym-log-today" rows="4" placeholder="Escribe tus series de hoy..." oninput="saveGymLog()"></textarea>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:14px;">
     <div class="card-header"><div class="card-icon ci-amber">📐</div><div><div class="card-title">Reglas de oro</div></div></div>
     <div class="card-body">
       <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Progresión de cargas semanal</div><div class="step-desc">Cada semana intenta +1-2kg o +1 rep. Sin progresión no hay músculo. Anótalo en el móvil.</div></div></div>
@@ -1064,7 +982,6 @@ body.standalone .install-banner { display: none; }
 
 <!-- ========= SECTION: DIETA ========= -->
 <div class="section" id="sec-dieta">
-  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
   <div class="sec-title">Dieta <span>variada</span></div>
 
   <div class="card"><div class="card-body">
@@ -1074,7 +991,7 @@ body.standalone .install-banner { display: none; }
     <div class="macro-row"><div class="macro-label">Calorías</div><div class="macro-track"><div class="macro-fill" style="width:100%;background:var(--accent);"></div></div><div class="macro-val" style="color:var(--accent2);">~2600 kcal</div></div>
   </div></div>
 
-  <div class="day-tabs" id="diet-tabs">
+  <div class="day-tabs">
     <button class="day-tab active" onclick="showDietDay(0)">Día 1</button>
     <button class="day-tab" onclick="showDietDay(1)">Día 2</button>
     <button class="day-tab" onclick="showDietDay(2)">Día 3</button>
@@ -1152,7 +1069,6 @@ body.standalone .install-banner { display: none; }
 
 <!-- ========= SECTION: PRODUCTOS ========= -->
 <div class="section" id="sec-productos">
-  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
   <div class="sec-title">Lista de <span>compra</span></div>
   <div class="info imp"><div class="info-icon">🛒</div><div>Todo lo que necesitas ordenado por prioridad. ESENCIAL = cómpralo ya. RECOMENDADO = cuando puedas. OPCIONAL = mejora extra.</div></div>
 
@@ -1192,785 +1108,75 @@ body.standalone .install-banner { display: none; }
 </div>
 
 
-
-<!-- ========= SECTION: COACH ========= -->
-<div class="section" id="sec-coach">
-  <div class="sec-title">Coach <span>IA</span> <span class="mode-pill mode-normal" id="mode-pill">Normal</span></div>
-  <div class="info imp"><div class="info-icon">🤖</div><div><b>100% gratis</b> — funciona sin internet. Experto en gym, dieta, skincare e higiene. Se adapta a tu día.</div></div>
-  <div class="quick-chips" id="quick-chips"></div>
-  <div class="card chat-wrap">
-    <div class="card-body" style="display:flex;flex-direction:column;height:100%;padding:12px;">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-input-row">
-        <input type="text" class="chat-input" id="chat-input" placeholder="Ej: hoy estoy fuera de casa..." onkeydown="if(event.key==='Enter')sendChat()">
-        <button class="chat-send" onclick="sendChat()">→</button>
-      </div>
+<!-- ========= SECTION: PROGRESO ========= -->
+<div class="section" id="sec-progreso">
+  <div class="sec-title">Mi <span>progreso</span></div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-green">⚖️</div><div><div class="card-title">Peso corporal</div><div class="card-sub">Registra 1× por semana, misma hora</div></div></div>
+    <div class="card-body">
+      <input type="number" step="0.1" id="weight-input" class="goal-input" placeholder="Peso en kg (ej: 72.5)">
+      <button type="button" class="save-btn" data-action="save-weight">Guardar peso</button>
+      <div id="weight-log" style="margin-top:12px;"></div>
     </div>
   </div>
-</div>
-
-<!-- ========= SECTION: MÁS ========= -->
-<div class="section" id="sec-mas">
-  <div class="sec-title">Más <span>opciones</span></div>
-  <div class="mas-grid">
-    <div class="mas-tile" onclick="openFromMas('dieta')"><div class="mas-tile-icon">🥗</div><div class="mas-tile-lbl">Dieta</div></div>
-    <div class="mas-tile" onclick="openFromMas('progreso')"><div class="mas-tile-icon">📈</div><div class="mas-tile-lbl">Progreso</div></div>
-    <div class="mas-tile" onclick="openFromMas('productos')"><div class="mas-tile-icon">🛒</div><div class="mas-tile-lbl">Compras</div></div>
-    <div class="mas-tile" onclick="openFromMas('ajustes')"><div class="mas-tile-icon">⚙️</div><div class="mas-tile-lbl">Ajustes</div></div>
-  </div>
-  <div class="card" style="margin-top:14px;">
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-teal">📏</div><div><div class="card-title">Medidas</div><div class="card-sub">Pecho, cintura, brazos — cada 2 semanas</div></div></div>
     <div class="card-body">
-      <div class="step-title" style="margin-bottom:8px;">📱 Instalar en iPhone</div>
-      <div class="step-desc" style="line-height:1.7;">1. Abre esta app en <b>Safari</b> (no Chrome)<br>2. Toca <b>Compartir</b> ↑<br>3. <b>Añadir a pantalla de inicio</b><br>4. Listo — icono como app nativa, gratis para siempre.</div>
+      <input type="number" step="0.1" id="meas-chest" class="goal-input" placeholder="Pecho (cm)">
+      <input type="number" step="0.1" id="meas-waist" class="goal-input" placeholder="Cintura (cm)">
+      <input type="number" step="0.1" id="meas-arms" class="goal-input" placeholder="Brazos (cm)">
+      <button type="button" class="save-btn" data-action="save-measures">Guardar medidas</button>
     </div>
   </div>
 </div>
 
 <!-- ========= SECTION: AJUSTES ========= -->
 <div class="section" id="sec-ajustes">
-  <div class="back-bar visible" id="back-ajustes" onclick="showSection('mas')">← Volver</div>
-  <div class="sec-title">Ajustes <span>personales</span></div>
+  <div class="sec-title">Ajustes</div>
   <div class="card"><div class="card-body">
-    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;">METAS DIARIAS</div>
-    <div class="form-row">
-      <input type="number" class="form-input" id="set-protein" placeholder="Proteína (g)" value="160">
-      <input type="number" class="form-input" id="set-water" placeholder="Agua (ml)" value="3000">
-    </div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted);margin:16px 0 10px;">MODO DEL DÍA</div>
-    <div class="tracker-btns">
-      <button class="tracker-btn" onclick="setDayMode('normal')">🏠 En casa</button>
-      <button class="tracker-btn" onclick="setDayMode('away')">✈️ Fuera</button>
-      <button class="tracker-btn" onclick="setDayMode('rest')">😴 Descanso</button>
-    </div>
-    <button class="form-btn" style="width:100%;margin-top:14px;" onclick="saveProfile()">Guardar ajustes</button>
-    <button class="reset-btn" style="margin-top:10px;" onclick="if(confirm('¿Borrar todos los datos?'))clearAllData()">Borrar todos los datos</button>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Metas diarias y preferencias. Todo se guarda en tu móvil.</p>
+    <label style="font-size:12px;color:var(--muted);">Proteína (g/día)</label>
+    <input type="number" id="goal-protein" class="goal-input" value="160">
+    <label style="font-size:12px;color:var(--muted);">Agua (ml/día)</label>
+    <input type="number" id="goal-water" class="goal-input" value="3000">
+    <button type="button" class="save-btn" data-action="save-goals">Guardar metas</button>
+    <div class="divider"></div>
+    <p style="font-size:12px;color:var(--muted);line-height:1.5;">📱 Instalar: Safari → Compartir → Añadir a pantalla de inicio.<br>URL: devpedrohurtadoo.github.io/Routine/</p>
   </div></div>
 </div>
 
-
-<!-- ========= SECTION: PROGRESO ========= -->
-<div class="section" id="sec-progreso">
-  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
-  <div class="sec-title">
-  <div class="sec-title">Mi <span>progreso</span></div>
-  <div class="card">
-    <div class="card-header"><div class="card-icon ci-green">⚖️</div><div><div class="card-title">Peso corporal</div><div class="card-sub">Seguimiento semanal</div></div></div>
-    <div class="card-body">
-      <div class="form-row">
-        <input type="number" step="0.1" class="form-input" id="weight-input" placeholder="kg ej: 72.5">
-        <button class="form-btn" onclick="addWeight()">Guardar</button>
-      </div>
-      <div class="chart-bars" id="weight-chart"></div>
-      <div id="weight-list"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><div class="card-icon ci-purple">📏</div><div><div class="card-title">Medidas corporales</div><div class="card-sub">cm — cada 2 semanas</div></div></div>
-    <div class="card-body">
-      <div class="form-row">
-        <input type="number" step="0.1" class="form-input" id="m-chest" placeholder="Pecho">
-        <input type="number" step="0.1" class="form-input" id="m-arm" placeholder="Brazo">
-      </div>
-      <div class="form-row">
-        <input type="number" step="0.1" class="form-input" id="m-waist" placeholder="Cintura">
-        <input type="number" step="0.1" class="form-input" id="m-thigh" placeholder="Muslo">
-      </div>
-      <button class="form-btn" style="width:100%;" onclick="addMeasurement()">Guardar medidas</button>
-      <div id="measure-list" style="margin-top:12px;"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><div class="card-icon ci-amber">📊</div><div><div class="card-title">Resumen semanal</div></div></div>
-    <div class="card-body">
-      <div class="step-item"><div class="step-num">🏋️</div><div class="step-content"><div class="step-title">Entrenos</div><div class="step-desc" id="sum-gym">0 / 5</div></div></div>
-      <div class="step-item"><div class="step-num">✓</div><div class="step-content"><div class="step-title">Días hábitos completos</div><div class="step-desc" id="sum-habits">0</div></div></div>
-      <div class="step-item"><div class="step-num">🔥</div><div class="step-content"><div class="step-title">Racha</div><div class="step-desc" id="sum-streak">0 días</div></div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><div class="card-icon ci-pink">📝</div><div><div class="card-title">Notas</div></div></div>
-    <div class="card-body">
-      <textarea class="gym-log-input" id="progress-notes" rows="3" placeholder="Cambios que notas, energía, sueño..." oninput="saveNotes()"></textarea>
-    </div>
+<!-- ========= SECTION: MAS ========= -->
+<div class="section" id="sec-mas">
+  <div class="sec-title">Más</div>
+  <div class="mas-grid">
+    <div class="mas-item" data-action="mas-item" data-section="dieta"><div class="mas-icon">🥗</div><div class="mas-label">Dieta</div></div>
+    <div class="mas-item" data-action="mas-item" data-section="progreso"><div class="mas-icon">📈</div><div class="mas-label">Progreso</div></div>
+    <div class="mas-item" data-action="mas-item" data-section="productos"><div class="mas-icon">🛒</div><div class="mas-label">Compras</div></div>
+    <div class="mas-item" data-action="mas-item" data-section="ajustes"><div class="mas-icon">⚙️</div><div class="mas-label">Ajustes</div></div>
   </div>
 </div>
 
 <!-- NAV BAR -->
 <nav class="nav">
-  <button class="nav-btn active" id="nav-hoy" onclick="showSection('hoy')">
+  <button type="button" class="nav-btn active" id="nav-hoy" data-action="nav" data-section="hoy">
     <div class="nav-icon">🏠</div>Hoy
   </button>
-  <button class="nav-btn" id="nav-coach" onclick="showSection('coach')">
+  <button type="button" class="nav-btn" id="nav-coach" data-action="nav" data-section="coach">
     <div class="nav-icon">🤖</div>Coach
   </button>
-  <button class="nav-btn" id="nav-rutina" onclick="showSection('rutina')">
+  <button type="button" class="nav-btn" id="nav-rutina" data-action="nav" data-section="rutina">
     <div class="nav-icon">⏰</div>Rutina
   </button>
-  <button class="nav-btn" id="nav-gym" onclick="showSection('gym')">
+  <button type="button" class="nav-btn" id="nav-gym" data-action="nav" data-section="gym">
     <div class="nav-icon">🏋️</div>Gym
   </button>
-  <button class="nav-btn" id="nav-mas" onclick="showSection('mas')">
+  <button type="button" class="nav-btn" id="nav-mas" data-action="nav" data-section="mas">
     <div class="nav-icon">⋯</div>Más
   </button>
 </nav>
 
-<script>
-const STORAGE = 'mr_';
-const WATER_GOAL_KEY = 'waterGoal';
-const PROTEIN_GOAL_KEY = 'proteinGoal';
-const HABIT_COUNT = 7;
-const RING_CIRC = 175.9;
-
-let wakeHour = null;
-let wakeMinute = 0;
-let lastDayKey = null;
-let timerSeconds = 120;
-let timerInterval = null;
-let timerRunning = false;
-
-const gymDays = ['Push — pecho, hombros y tríceps','Pull — espalda y bíceps','Pierna completa','Push 2 — variante','Pull 2 — variante','Descanso activo','Descanso activo'];
-
-function todayKey() {
-  const n = new Date();
-  return n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate());
-}
-
-function loadJSON(key, def) {
-  try {
-    const v = localStorage.getItem(STORAGE + key);
-    return v ? JSON.parse(v) : def;
-  } catch (e) { return def; }
-}
-
-function saveJSON(key, val) {
-  localStorage.setItem(STORAGE + key, JSON.stringify(val));
-}
-
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-function getProfile() {
-  return loadJSON('profile', {
-    proteinGoal: 160,
-    waterGoal: 3000,
-    dayMode: 'normal',
-    age: 16,
-    height: 1.8
-  });
-}
-
-function getWaterGoal() { return getProfile().waterGoal || 3000; }
-function getProteinGoal() { return getProfile().proteinGoal || 160; }
-
-function getWakeToday() {
-  return loadJSON('wake_' + todayKey(), null);
-}
-
-function isAwakeToday() {
-  const w = getWakeToday();
-  return w && typeof w.h === 'number';
-}
-
-function confirmWake() {
-  const now = new Date();
-  wakeHour = now.getHours();
-  wakeMinute = now.getMinutes();
-  saveJSON('wake_' + todayKey(), { h: wakeHour, m: wakeMinute });
-  hideWakeOverlay();
-  updateWakeUI();
-  buildTimelines();
-  if (navigator.vibrate) navigator.vibrate(50);
-}
-
-function hideWakeOverlay() {
-  const o = document.getElementById('wake-overlay');
-  if (o) o.classList.add('hidden');
-}
-
-function showWakeOverlay() {
-  const o = document.getElementById('wake-overlay');
-  if (o) o.classList.remove('hidden');
-}
-
-function updateWakeUI() {
-  const btn = document.getElementById('wake-btn');
-  const st = document.getElementById('wake-status');
-  const w = getWakeToday();
-  if (w) {
-    wakeHour = w.h;
-    wakeMinute = w.m || 0;
-    if (btn) {
-      btn.classList.add('done');
-      btn.textContent = '✓ Despertaste a las ' + fmt(w.h, w.m);
-      btn.onclick = function () {
-        if (confirm('¿Registrar de nuevo tu despertar ahora?')) confirmWake();
-      };
-    }
-    if (st) st.textContent = 'Rutina calculada desde las ' + fmt(w.h, w.m);
-    hideWakeOverlay();
-  } else {
-    wakeHour = null;
-    if (btn) {
-      btn.classList.remove('done');
-      btn.textContent = '☀️ ¡Me he despertado!';
-      btn.onclick = confirmWake;
-    }
-    if (st) st.textContent = 'Pulsa al despertar — nuevo día desde las 00:00';
-    showWakeOverlay();
-  }
-}
-
-function loadWake() {
-  updateWakeUI();
-}
-
-function checkMidnightReset() {
-  const today = todayKey();
-  if (lastDayKey === null) lastDayKey = loadJSON('lastDay', today);
-  if (lastDayKey !== today) {
-    onNewDay(lastDayKey, today);
-    lastDayKey = today;
-    saveJSON('lastDay', today);
-  }
-}
-
-function onNewDay(prev, today) {
-  wakeHour = null;
-  wakeMinute = 0;
-  showWakeOverlay();
-  updateWakeUI();
-  setGreeting();
-  setHeroDate();
-  updateTrackers();
-  updateHabitUI();
-  updateNowCard();
-  updateModePill();
-  const gymLog = document.getElementById('gym-log-today');
-  if (gymLog) gymLog.value = '';
-  initChat();
-}
-
-function tick() {
-  checkMidnightReset();
-  const now = new Date();
-  document.getElementById('clock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
-  if (isAwakeToday()) updateNowCard();
-}
-
-tick();
-setInterval(tick, 15000);
-
-function setGreeting() {
-  const h = new Date().getHours();
-  let g = 'Buenas noches';
-  if (h >= 5 && h < 12) g = 'Buenos días';
-  else if (h >= 12 && h < 20) g = 'Buenas tardes';
-  const el = document.getElementById('hero-greeting');
-  if (el) el.textContent = g + ' 👋';
-}
-
-function setHeroDate() {
-  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  const now = new Date();
-  const wd = now.getDay();
-  document.getElementById('hero-date').textContent = days[wd] + ', ' + now.getDate() + ' de ' + months[now.getMonth()];
-  const el = document.getElementById('habit-gym-day');
-  if (el) el.textContent = gymDays[wd];
-}
-
-function fmt(h, m) {
-  if (h === null || h === undefined) return '--:--';
-  let hh = h, mm = m || 0;
-  if (mm >= 60) { hh += Math.floor(mm / 60); mm = mm % 60; }
-  hh = ((hh % 24) + 24) % 24;
-  return pad(hh) + ':' + pad(mm);
-}
-
-function addMins(h, m, add) {
-  let total = h * 60 + (m || 0) + add;
-  return { h: Math.floor(total / 60) % 24, m: total % 60 };
-}
-
-function timeToMins(str) {
-  if (!str || str === '--:--') return 9999;
-  const p = str.split(':');
-  return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
-}
-
-function scheduleOffset(mins) {
-  if (!isAwakeToday()) return '--:--';
-  const t = addMins(wakeHour, wakeMinute, mins);
-  return fmt(t.h, t.m);
-}
-
-function getSchedule() {
-  if (!isAwakeToday()) return [];
-  const profile = getProfile();
-  const away = profile.dayMode === 'away';
-  const rest = profile.dayMode === 'rest';
-  const wd = new Date().getDay();
-  const isGym = wd >= 1 && wd <= 5 && !rest;
-
-  const base = [
-    { t: scheduleOffset(0), title: '💧 Agua al despertar', desc: '400-500ml ahora. Meta: ' + (getWaterGoal() / 1000) + 'L hoy.' },
-    { t: scheduleOffset(5), title: '🦷 Higiene bucal', desc: 'Rascador → cepillo → hilo → enjuague.' },
-    { t: scheduleOffset(12), title: '✨ Skincare mañana', desc: away ? 'Limpiador + SPF mínimo (viaje)' : 'Limpiador → Vit C → SPF 30.' },
-    { t: scheduleOffset(20), title: '🚿 Ducha', desc: 'Jabón antibacterial en axilas 30 seg.' },
-    { t: scheduleOffset(35), title: '🍳 Desayuno', desc: away ? 'Proteína alta: huevos, yogur, o bocadillo pavo' : 'Alto en proteína. Ver Dieta.' },
-    { t: scheduleOffset(150), title: '🥗 Media mañana', desc: 'Yogur griego + frutos secos o barrita proteica.' },
-    { t: scheduleOffset(270), title: '🍚 Comida', desc: away ? 'Pollo/pescado + arroz. Evita frituras' : 'Comida principal. Ver Dieta.' },
-  ];
-
-  if (isGym && !away) {
-    base.push(
-      { t: scheduleOffset(450), title: '🏋️ Pre-gym', desc: 'Snack 30 min antes.' },
-      { t: scheduleOffset(480), title: '💪 Gimnasio', desc: gymDays[wd] + ' — 60-75 min.' },
-      { t: scheduleOffset(570), title: '🥤 Post-gym', desc: 'Whey + carbos en 30-60 min.' }
-    );
-  } else if (away) {
-    base.push({ t: scheduleOffset(480), title: '💪 Movimiento', desc: 'Hotel gym, flexiones o caminata 30 min.' });
-  } else {
-    base.push({ t: scheduleOffset(480), title: '🚶 Actividad', desc: 'Paseo, estiramientos o descanso activo.' });
-  }
-
-  base.push(
-    { t: scheduleOffset(720), title: '🍽️ Cena', desc: 'Proteína + verduras. Cierra proteína del día.' },
-    { t: scheduleOffset(810), title: '🌙 Skincare noche', desc: 'Limpiador → Niacinamida → hidratante.' },
-    { t: scheduleOffset(825), title: '🦷 Higiene noche', desc: 'Rutina completa con hilo.' },
-    { t: scheduleOffset(840), title: '🛡️ Antitranspirante', desc: 'Axilas secas. De noche.' },
-    { t: scheduleOffset(900), title: '😴 Dormir', desc: '8-9h. Teléfono boca abajo 1h antes.' }
-  );
-  return base;
-}
-
-function updateNowCard() {
-  const title = document.getElementById('now-title');
-  const time = document.getElementById('now-time');
-  const desc = document.getElementById('now-desc');
-  if (!title) return;
-
-  if (!isAwakeToday()) {
-    title.textContent = 'Pulsa «Me he despertado»';
-    time.textContent = 'Arriba en el header';
-    desc.textContent = 'Tu rutina del día (comidas, gym, skincare) se calcula desde el momento en que despiertas.';
-    return;
-  }
-
-  const schedule = getSchedule();
-  const curMins = new Date().getHours() * 60 + new Date().getMinutes();
-  let next = schedule[schedule.length - 1];
-  for (const item of schedule) {
-    if (timeToMins(item.t) > curMins) { next = item; break; }
-  }
-  const allDone = timeToMins(schedule[schedule.length - 1].t) <= curMins;
-  title.textContent = allDone ? '¡Día completado! 🎉' : next.title;
-  time.textContent = allDone ? 'Descansa bien' : ('A las ' + next.t);
-  desc.textContent = allDone ? 'Mañana nuevo día a las 00:00.' : next.desc;
-}
-
-function tli(time, title, desc) {
-  return '<div class="timeline-item"><div class="tl-time">' + time + '</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-title">' + title + '</div><div class="tl-desc">' + desc + '</div></div></div>';
-}
-
-function buildTimelines() {
-  const sub = document.getElementById('morning-sub');
-  if (!isAwakeToday()) {
-    if (sub) sub.textContent = 'Despierta para ver horarios';
-    ['morning-timeline','afternoon-timeline','night-timeline'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = '<p style="font-size:12px;color:var(--muted);padding:8px 0;">Pulsa «Me he despertado» cuando te levantes.</p>';
-    });
-    updateNowCard();
-    return;
-  }
-
-  if (sub) sub.textContent = 'Desde las ' + fmt(wakeHour, wakeMinute);
-  const s = getSchedule();
-  const morning = s.slice(0, 5);
-  const afternoon = s.slice(5, s.length - 5);
-  const night = s.slice(-5);
-
-  document.getElementById('morning-timeline').innerHTML = morning.map(a => tli(a.t, a.title, a.desc)).join('');
-  document.getElementById('afternoon-timeline').innerHTML = afternoon.map(a => tli(a.t, a.title, a.desc)).join('');
-  document.getElementById('night-timeline').innerHTML = night.map(a => tli(a.t, a.title, a.desc)).join('');
-
-  const w = wakeHour;
-  ['d0','d1','d2','d3','d4','d5','d6'].forEach(d => {
-    const el = document.getElementById(d + '-des');
-    if (el) el.textContent = scheduleOffset(35);
-    const mm = document.getElementById(d + '-mm');
-    if (mm) mm.textContent = scheduleOffset(150);
-    const pg = document.getElementById(d + '-pg');
-    if (pg) pg.textContent = scheduleOffset(isAwakeToday() && new Date().getDay() >= 1 && new Date().getDay() <= 5 ? 570 : 480);
-  });
-  updateNowCard();
-}
-
-function getWater() { return loadJSON('water_' + todayKey(), 0); }
-function getProtein() { return loadJSON('protein_' + todayKey(), 0); }
-
-function updateTrackers() {
-  const wg = getWaterGoal(), pg = getProteinGoal();
-  const water = getWater(), protein = getProtein();
-  document.getElementById('water-val').textContent = water + ' / ' + wg + ' ml';
-  document.getElementById('water-fill').style.width = Math.min(100, water / wg * 100) + '%';
-  document.getElementById('protein-val').textContent = protein + ' / ' + pg + ' g';
-  document.getElementById('protein-fill').style.width = Math.min(100, protein / pg * 100) + '%';
-  document.getElementById('stat-water').textContent = (water / 1000).toFixed(1) + 'L';
-  document.getElementById('stat-protein').textContent = protein + 'g';
-  if (water >= wg) markHabitByIndex(0);
-  if (protein >= pg) markHabitByIndex(3);
-}
-
-function addWater(ml) { saveJSON('water_' + todayKey(), Math.max(0, getWater() + ml)); updateTrackers(); }
-function setWater(v) { saveJSON('water_' + todayKey(), v); updateTrackers(); }
-function addProtein(g) { saveJSON('protein_' + todayKey(), Math.max(0, getProtein() + g)); updateTrackers(); }
-
-function getHabitsDone() { return loadJSON('habits_' + todayKey(), []); }
-function saveHabitsDone(arr) { saveJSON('habits_' + todayKey(), arr); updateHabitUI(); updateStreak(); updateSummary(); }
-
-function toggleHabit(el) {
-  const idx = parseInt(el.dataset.habit, 10);
-  let done = getHabitsDone();
-  done = done.includes(idx) ? done.filter(i => i !== idx) : done.concat([idx]);
-  saveHabitsDone(done);
-}
-
-function markHabitByIndex(idx) {
-  const done = getHabitsDone();
-  if (!done.includes(idx)) saveHabitsDone(done.concat([idx]));
-}
-
-function updateHabitUI() {
-  const done = getHabitsDone();
-  document.querySelectorAll('.habit-item[data-habit]').forEach(el => {
-    const idx = parseInt(el.dataset.habit, 10);
-    const isDone = done.includes(idx);
-    el.classList.toggle('done', isDone);
-    el.querySelector('.habit-check').textContent = isDone ? '✓' : '';
-  });
-  const pct = Math.round(done.length / HABIT_COUNT * 100);
-  document.getElementById('habit-pct').textContent = pct + '%';
-  document.getElementById('stat-habits').textContent = pct + '%';
-  const ring = document.getElementById('habit-ring');
-  if (ring) ring.style.strokeDashoffset = RING_CIRC - (RING_CIRC * pct / 100);
-}
-
-function resetHabits() {
-  saveHabitsDone([]);
-  saveJSON('water_' + todayKey(), 0);
-  saveJSON('protein_' + todayKey(), 0);
-  updateTrackers();
-}
-
-function updateStreak() {
-  let streak = loadJSON('streak', { count: 0, lastDate: '' });
-  const today = todayKey();
-  if (getHabitsDone().length >= 5) {
-    const y = new Date(); y.setDate(y.getDate() - 1);
-    const yKey = y.getFullYear() + '-' + pad(y.getMonth() + 1) + '-' + pad(y.getDate());
-    if (streak.lastDate !== today) {
-      streak.count = (streak.lastDate === yKey) ? streak.count + 1 : 1;
-      streak.lastDate = today;
-      saveJSON('streak', streak);
-    }
-  }
-  document.getElementById('streak-badge').textContent = '🔥 ' + streak.count + ' días seguidos';
-  const ss = document.getElementById('sum-streak');
-  if (ss) ss.textContent = streak.count + ' días';
-}
-
-function setTimerPreset(sec, btn) {
-  timerSeconds = sec; timerRunning = false; clearInterval(timerInterval);
-  document.querySelectorAll('.timer-preset').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  updateTimerDisplay();
-  document.getElementById('timer-btn').textContent = 'Iniciar';
-}
-
-function updateTimerDisplay() {
-  document.getElementById('timer-display').textContent = Math.floor(timerSeconds / 60) + ':' + pad(timerSeconds % 60);
-}
-
-function toggleTimer() {
-  if (timerRunning) {
-    clearInterval(timerInterval); timerRunning = false;
-    document.getElementById('timer-btn').textContent = 'Reanudar';
-    return;
-  }
-  timerRunning = true;
-  document.getElementById('timer-btn').textContent = 'Pausar';
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    updateTimerDisplay();
-    if (timerSeconds <= 0) {
-      clearInterval(timerInterval); timerRunning = false;
-      document.getElementById('timer-btn').textContent = 'Iniciar';
-      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    }
-  }, 1000);
-}
-
-function resetTimer() {
-  timerSeconds = 120; timerRunning = false; clearInterval(timerInterval);
-  updateTimerDisplay();
-  document.getElementById('timer-btn').textContent = 'Iniciar';
-}
-
-function saveGymLog() {
-  const el = document.getElementById('gym-log-today');
-  if (!el) return;
-  saveJSON('gymlog_' + todayKey(), el.value);
-  const wd = new Date().getDay();
-  if (wd >= 1 && wd <= 5 && el.value.trim()) markHabitByIndex(4);
-}
-
-function addWeight() {
-  const kg = parseFloat(document.getElementById('weight-input').value);
-  if (!kg || kg < 30 || kg > 200) { alert('Peso válido: 30-200 kg'); return; }
-  let logs = loadJSON('weights', []);
-  logs.push({ date: todayKey(), kg });
-  saveJSON('weights', logs.slice(-20));
-  document.getElementById('weight-input').value = '';
-  renderWeights();
-}
-
-function renderWeights() {
-  const logs = loadJSON('weights', []);
-  const list = document.getElementById('weight-list');
-  const chart = document.getElementById('weight-chart');
-  if (!list) return;
-  if (!logs.length) {
-    list.innerHTML = '<p style="font-size:12px;color:var(--muted)">Sin registros</p>';
-    if (chart) chart.innerHTML = '';
-    return;
-  }
-  const max = Math.max(...logs.map(l => l.kg)), min = Math.min(...logs.map(l => l.kg)), range = max - min || 1;
-  if (chart) chart.innerHTML = logs.slice(-8).map(l => {
-    const ht = Math.max(15, ((l.kg - min) / range) * 70 + 15);
-    return '<div class="chart-bar-wrap"><div class="chart-bar" style="height:' + ht + 'px"></div><div class="chart-lbl">' + l.date.slice(5) + '</div></div>';
-  }).join('').split('div').join('div');
-  list.innerHTML = logs.slice().reverse().slice(0, 5).map(l =>
-    '<div class="log-entry"><span class="log-date">' + l.date + '</span><span class="log-val">' + l.kg + ' kg</span></div>'
-  ).join('');
-}
-
-function addMeasurement() {
-  const m = {
-    date: todayKey(),
-    chest: parseFloat(document.getElementById('m-chest').value) || null,
-    arm: parseFloat(document.getElementById('m-arm').value) || null,
-    waist: parseFloat(document.getElementById('m-waist').value) || null,
-    thigh: parseFloat(document.getElementById('m-thigh').value) || null
-  };
-  if (!m.chest && !m.arm && !m.waist && !m.thigh) { alert('Al menos una medida'); return; }
-  let logs = loadJSON('measures', []); logs.push(m); saveJSON('measures', logs);
-  ['m-chest','m-arm','m-waist','m-thigh'].forEach(id => document.getElementById(id).value = '');
-  renderMeasures();
-}
-
-function renderMeasures() {
-  const logs = loadJSON('measures', []);
-  const el = document.getElementById('measure-list');
-  if (!el) return;
-  el.innerHTML = logs.length ? logs.slice().reverse().slice(0, 4).map(m =>
-    '<div class="log-entry"><span class="log-date">' + m.date + '</span><span class="log-val">P:' + (m.chest || '—') + ' B:' + (m.arm || '—') + ' C:' + (m.waist || '—') + '</span></div>'
-  ).join('') : '<p style="font-size:12px;color:var(--muted)">Sin medidas</p>';
-}
-
-function saveNotes() {
-  const el = document.getElementById('progress-notes');
-  if (el) saveJSON('notes', el.value);
-}
-
-function updateSummary() {
-  let gymCount = 0, habitDays = 0;
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(); d.setDate(d.getDate() - i);
-    const k = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-    if (loadJSON('gymlog_' + k, '').trim()) gymCount++;
-    if (loadJSON('habits_' + k, []).length >= 5) habitDays++;
-  }
-  const sg = document.getElementById('sum-gym'), sh = document.getElementById('sum-habits');
-  if (sg) sg.textContent = gymCount + ' / 5 esta semana';
-  if (sh) sh.textContent = habitDays + ' días con 5+ hábitos';
-}
-
-function setDayMode(mode) {
-  const p = getProfile();
-  p.dayMode = mode;
-  saveJSON('profile', p);
-  updateModePill();
-  buildTimelines();
-  if (typeof Coach !== 'undefined') Coach.saveDayMode(mode);
-}
-
-function updateModePill() {
-  const pill = document.getElementById('mode-pill');
-  if (!pill) return;
-  const m = getProfile().dayMode || 'normal';
-  const labels = { normal: 'Normal', away: 'Fuera', rest: 'Descanso' };
-  pill.textContent = labels[m] || 'Normal';
-  pill.className = 'mode-pill mode-' + m;
-}
-
-function saveProfile() {
-  const p = getProfile();
-  p.proteinGoal = parseInt(document.getElementById('set-protein').value, 10) || 160;
-  p.waterGoal = parseInt(document.getElementById('set-water').value, 10) || 3000;
-  saveJSON('profile', p);
-  updateTrackers();
-  alert('Ajustes guardados');
-}
-
-function clearAllData() {
-  Object.keys(localStorage).filter(k => k.startsWith(STORAGE)).forEach(k => localStorage.removeItem(k));
-  location.reload();
-}
-
-function openFromMas(sec) { showSection(sec); }
-
-function showSection(name) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + name).classList.add('active');
-  const nav = document.getElementById('nav-' + name);
-  if (nav) nav.classList.add('active');
-  else if (['dieta','progreso','productos','ajustes'].includes(name)) {
-    const mas = document.getElementById('nav-mas');
-    if (mas) mas.classList.add('active');
-  }
-  window.scrollTo(0, 0);
-  if (name === 'progreso') { renderWeights(); renderMeasures(); updateSummary(); }
-  if (name === 'coach') initChat();
-  if (name === 'ajustes') loadSettingsForm();
-}
-
-function loadSettingsForm() {
-  const p = getProfile();
-  const sp = document.getElementById('set-protein');
-  const sw = document.getElementById('set-water');
-  if (sp) sp.value = p.proteinGoal;
-  if (sw) sw.value = p.waterGoal;
-}
-
-function showGymDay(i) {
-  document.querySelectorAll('.gym-day').forEach(d => d.classList.remove('active'));
-  document.getElementById('gym-' + i).classList.add('active');
-  document.querySelectorAll('#gym-tabs .day-tab').forEach((t, ti) => t.classList.toggle('active', ti === i));
-}
-
-function showDietDay(i) {
-  document.querySelectorAll('.diet-day').forEach(d => d.classList.remove('active'));
-  document.getElementById('diet-' + i).classList.add('active');
-  document.querySelectorAll('#diet-tabs .day-tab').forEach((t, ti) => t.classList.toggle('active', ti === i));
-}
-
-function getCoachState() {
-  const w = getWakeToday();
-  const streak = loadJSON('streak', { count: 0 });
-  return {
-    wakeStr: w ? fmt(w.h, w.m) : 'no despertaste aún',
-    water: getWater(),
-    protein: getProtein(),
-    habitsDone: getHabitsDone().length,
-    streak: streak.count
-  };
-}
-
-function addChatMsg(text, isUser) {
-  const box = document.getElementById('chat-messages');
-  if (!box) return;
-  const d = document.createElement('div');
-  d.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
-  d.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/
-/g, '<br>');
-  box.appendChild(d);
-  box.scrollTop = box.scrollHeight;
-}
-
-function sendChat(text) {
-  const input = document.getElementById('chat-input');
-  const msg = (text || (input && input.value) || '').trim();
-  if (!msg) return;
-  if (input) input.value = '';
-  addChatMsg(msg, true);
-  const history = loadJSON('chat_' + todayKey(), []);
-  history.push({ role: 'user', text: msg });
-  let reply = 'Coach no disponible.';
-  if (typeof Coach !== 'undefined') {
-    reply = Coach.getReply(msg, getProfile(), getCoachState());
-  }
-  history.push({ role: 'bot', text: reply });
-  saveJSON('chat_' + todayKey(), history.slice(-40));
-  setTimeout(() => addChatMsg(reply, false), 300);
-  updateModePill();
-  buildTimelines();
-}
-
-function initChat() {
-  const chips = document.getElementById('quick-chips');
-  if (chips && !chips.dataset.done && typeof Coach !== 'undefined') {
-    chips.dataset.done = '1';
-    Coach.getQuickReplies().forEach(q => {
-      const b = document.createElement('button');
-      b.className = 'quick-chip';
-      b.textContent = q;
-      b.onclick = () => sendChat(q);
-      chips.appendChild(b);
-    });
-  }
-  const box = document.getElementById('chat-messages');
-  if (!box || box.dataset.loaded) return;
-  box.dataset.loaded = '1';
-  const history = loadJSON('chat_' + todayKey(), []);
-  if (!history.length) {
-    addChatMsg('¡Hola! Soy tu Coach personal. Pregúntame sobre gym, comida, piel, o dime si **estás fuera de casa** — adapto todo.', false);
-  } else {
-    history.forEach(h => addChatMsg(h.text, h.role === 'user'));
-  }
-}
-
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  document.body.classList.add('standalone');
-}
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
-}
-
-lastDayKey = loadJSON('lastDay', todayKey());
-checkMidnightReset();
-loadWake();
-buildTimelines();
-setGreeting();
-setHeroDate();
-updateTrackers();
-updateHabitUI();
-updateStreak();
-updateSummary();
-updateModePill();
-initChat();
-loadSettingsForm();
-
-const gymLogEl = document.getElementById('gym-log-today');
-if (gymLogEl) gymLogEl.value = loadJSON('gymlog_' + todayKey(), '');
-const notesEl = document.getElementById('progress-notes');
-if (notesEl) notesEl.value = loadJSON('notes', '');
-renderWeights();
-renderMeasures();
-updateTimerDisplay();
-
-const wd = new Date().getDay();
-const gymMap = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
-if (gymMap[wd] !== undefined) showGymDay(gymMap[wd]);
-showDietDay(wd === 0 ? 6 : wd - 1);
-
-const dietTabs = document.querySelector('.day-tabs:not(#gym-tabs)');
-if (dietTabs && !dietTabs.id) dietTabs.id = 'diet-tabs';
-
-</script>
+<script src="coach.js"></script>
+<script src="step-counter.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
