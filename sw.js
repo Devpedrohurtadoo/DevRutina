@@ -1,4 +1,4 @@
-const CACHE = 'mi-rutina-v7';
+const CACHE = 'mi-rutina-v10';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,8 @@ const ASSETS = [
   './coach.js',
   './step-counter.js',
   './app.js',
+  './exercises.js',
+  './lift-log.js',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',

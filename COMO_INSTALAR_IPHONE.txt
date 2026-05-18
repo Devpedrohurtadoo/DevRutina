@@ -18,3 +18,15 @@ USO DIARIO
 • Más → Ajustes: metas de proteína/agua
 
 Todo es privado: los datos solo están en tu iPhone.
+
+ACTUALIZAR LA APP (rutina gym v8)
+---------------------------------
+Si en Gym ves "4×8-10" o "12-15 reps" en todo, tienes la version VIEJA en cache.
+
+1. Sube TODOS los archivos de esta carpeta a GitHub:
+   https://github.com/Devpedrohurtadoo/Routine
+   (mi_rutina.html, app.js, coach.js, step-counter.js, sw.js, iconos, manifest, index.html)
+
+2. En el iPhone: borra el icono "Mi Rutina" de inicio
+3. Safari → abre la URL → Añadir a pantalla de inicio otra vez
+4. En Gym debe decir "PPL Hipertrofia v8" y Press banca "5×5"

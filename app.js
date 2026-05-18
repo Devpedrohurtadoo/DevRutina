@@ -10,7 +10,7 @@ let timerSeconds = 120;
 let timerInterval = null;
 let timerRunning = false;
 
-const gymDays = ['Push hipertrofia (5×5 banca)', 'Pull hipertrofia (remo 4×6)', 'Pierna (5×5 sentadilla)', 'Push 2 (inclinado 4×6)', 'Pull 2 (peso muerto 3×5)', 'Descanso activo', 'Descanso activo'];
+const gymDays = ['Push (3×5 banca)', 'Pull (remo 3×6)', 'Pierna (3×5 sentadilla)', 'Push 2', 'Pull 2 (muerto 3×5)', 'Descanso activo', 'Descanso activo'];
 
 function pad(n) { return n < 10 ? '0' + n : n; }
 
@@ -379,6 +379,54 @@ function resetHabits() {
   updateRing();
 }
 
+function toggleExDetail(exId) {
+  const el = document.getElementById('ex-detail-' + exId);
+  if (!el) return;
+  const open = el.hasAttribute('hidden');
+  if (open) {
+    el.removeAttribute('hidden');
+    if (typeof LiftLog !== 'undefined') {
+      const block = document.getElementById('ex-log-' + exId);
+      if (block) block.innerHTML = LiftLog.renderLogForm(exId);
+    }
+  } else {
+    el.setAttribute('hidden', '');
+  }
+}
+
+function playExVideo(exId, vid) {
+  const wrap = document.getElementById('ex-video-' + exId);
+  if (!wrap || wrap.querySelector('iframe')) return;
+  wrap.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + vid + '?rel=0" allowfullscreen loading="lazy" title="Técnica"></iframe>';
+}
+
+function exportLiftBackup() {
+  if (typeof LiftLog === 'undefined') return;
+  const data = LiftLog.exportBackup();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(data).then(function () { alert('Backup copiado al portapapeles ✓'); });
+  } else {
+    prompt('Copia este texto:', data);
+  }
+}
+
+function importLiftBackup() {
+  const ta = document.getElementById('lift-backup-import');
+  if (!ta || !ta.value.trim()) { alert('Pega el backup primero.'); return; }
+  try {
+    const data = JSON.parse(ta.value.trim());
+    if (typeof LiftLog !== 'undefined') LiftLog.save(data);
+    ta.value = '';
+    if (typeof LiftLog !== 'undefined') {
+      LiftLog.fillAllLogBlocks();
+      LiftLog.renderProgressPage();
+    }
+    alert('Backup restaurado ✓');
+  } catch (e) {
+    alert('JSON inválido. Copia el backup completo.');
+  }
+}
+
 function showSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -388,6 +436,7 @@ function showSection(name) {
   if (nav) nav.classList.add('active');
   const back = document.getElementById('back-bar');
   if (back) back.classList.toggle('visible', ['dieta', 'progreso', 'productos', 'ajustes'].indexOf(name) >= 0);
+  if (name === 'progreso' && typeof LiftLog !== 'undefined') LiftLog.renderProgressPage();
   window.scrollTo(0, 0);
 }
 
@@ -424,12 +473,14 @@ function sendCoachMessage(text) {
   const p = getProfile();
   const st = getDayState();
   const w = getWakeToday();
+  const liftLines = typeof LiftLog !== 'undefined' ? LiftLog.getSummaryForCoach() : [];
   const state = {
     wakeStr: w ? pad(w.h) + ':' + pad(w.m) : 'no registrada',
     water: st.water || 0,
     protein: st.protein || 0,
     habitsDone: getHabitsDone(),
     streak: loadJSON('streak', { count: 0 }).count || 0,
+    liftSummary: liftLines.length ? liftLines.join(' · ') : '',
   };
   chat.innerHTML += '<div class="coach-msg user">' + msg.replace(/</g, '&lt;') + '</div>';
   const reply = typeof Coach !== 'undefined' ? Coach.getReply(msg, p, state) : 'Coach no disponible.';
@@ -475,7 +526,8 @@ function pauseTimer() {
 
 function resetTimer() {
   pauseTimer();
-  timerSeconds = parseInt(document.getElementById('timer-preset')?.value || 120, 10);
+  const tp = document.getElementById('timer-preset');
+  timerSeconds = parseInt((tp && tp.value) || 120, 10);
   timerDisplay();
 }
 
@@ -527,8 +579,13 @@ function saveGoals() {
   alert('Metas guardadas ✓');
 }
 
-function bindEvents() {
-  document.body.addEventListener('click', function (e) {
+function handleAction(e) {
+    const habit = e.target.closest('.habit-item');
+    if (habit && !e.target.closest('[data-action]')) {
+      e.preventDefault();
+      toggleHabit(habit);
+      return;
+    }
     const t = e.target.closest('[data-action]');
     if (!t) return;
     const act = t.getAttribute('data-action');
@@ -562,18 +619,42 @@ function bindEvents() {
     if (act === 'save-weight') { e.preventDefault(); saveWeight(); return; }
     if (act === 'save-measures') { e.preventDefault(); saveMeasures(); return; }
     if (act === 'save-goals') { e.preventDefault(); saveGoals(); return; }
+    if (act === 'toggle-ex') { e.preventDefault(); toggleExDetail(t.getAttribute('data-ex')); return; }
+    if (act === 'play-ex-video') {
+      e.preventDefault();
+      playExVideo(t.getAttribute('data-ex'), t.getAttribute('data-vid'));
+      return;
+    }
+    if (act === 'save-lift') {
+      e.preventDefault();
+      if (typeof LiftLog !== 'undefined') LiftLog.saveSession(t.getAttribute('data-ex'));
+      return;
+    }
+    if (act === 'export-lift-backup') { e.preventDefault(); exportLiftBackup(); return; }
+    if (act === 'import-lift-backup') { e.preventDefault(); importLiftBackup(); return; }
     if (act === 'coach-send') { e.preventDefault(); sendCoachMessage(); return; }
     if (act === 'reset-habits') { e.preventDefault(); resetHabits(); return; }
     if (act === 'gym-day') { e.preventDefault(); showGymDay(parseInt(t.getAttribute('data-day'), 10)); return; }
     if (act === 'diet-day') { e.preventDefault(); showDietDay(parseInt(t.getAttribute('data-day'), 10)); return; }
     if (act === 'nav') { e.preventDefault(); showSection(t.getAttribute('data-section')); return; }
     if (act === 'mas-item') { e.preventDefault(); showSection(t.getAttribute('data-section')); return; }
-  });
+}
 
+var lastTouchAt = 0;
+
+function bindEvents() {
   document.body.addEventListener('touchend', function (e) {
-    const t = e.target.closest('[data-action="wake"]');
-    if (t) { e.preventDefault(); confirmWake(); }
+    const t = e.target.closest('[data-action]');
+    if (!t) return;
+    lastTouchAt = Date.now();
+    e.preventDefault();
+    handleAction(e);
   }, { passive: false });
+
+  document.body.addEventListener('click', function (e) {
+    if (Date.now() - lastTouchAt < 400) return;
+    handleAction(e);
+  }, false);
 
   const coachInput = document.getElementById('coach-input');
   if (coachInput) {
@@ -585,10 +666,6 @@ function bindEvents() {
   document.body.addEventListener('click', function (e) {
     const q = e.target.closest('[data-coach]');
     if (q) { e.preventDefault(); sendCoachMessage(q.getAttribute('data-coach')); }
-  });
-
-  document.querySelectorAll('.habit-item').forEach(function (el) {
-    el.onclick = function () { toggleHabit(el); };
   });
 
   const timerPreset = document.getElementById('timer-preset');
@@ -603,40 +680,52 @@ function bindEvents() {
 }
 
 function init() {
-  checkMidnightReset();
-  setHeroDate();
-  tick();
-  setInterval(tick, 10000);
-  setInterval(function () { updateAhoraToca(); updateWakeUI(); }, 60000);
-  loadHabits();
-  updateTrackers();
-  updateRing();
-  updateStreak();
-  updateWakeUI();
-  updateAhoraToca();
-  const w = getWakeToday();
-  if (w) { wakeHour = w.h; wakeMinute = w.m; buildTimelines(); }
-  renderCoachQuick();
-  renderWeightLog();
-  timerDisplay();
   bindEvents();
 
-  if (typeof StepCounter !== 'undefined') StepCounter.init();
+  try {
+    checkMidnightReset();
+    setHeroDate();
+    tick();
+    setInterval(tick, 10000);
+    setInterval(function () { updateAhoraToca(); updateWakeUI(); }, 60000);
+    loadHabits();
+    updateTrackers();
+    updateRing();
+    updateStreak();
+    updateWakeUI();
+    updateAhoraToca();
+    const w = getWakeToday();
+    if (w) { wakeHour = w.h; wakeMinute = w.m; buildTimelines(); }
+    renderCoachQuick();
+    renderWeightLog();
+    timerDisplay();
 
-  const wd = new Date().getDay();
-  const gymMap = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
-  if (gymMap[wd] !== undefined) showGymDay(gymMap[wd]);
-  showDietDay(wd === 0 ? 6 : wd - 1);
+    if (typeof Exercises !== 'undefined' && Exercises.renderGymDays) {
+      Exercises.renderGymDays();
+    }
+    if (typeof LiftLog !== 'undefined' && LiftLog.fillAllLogBlocks) {
+      LiftLog.fillAllLogBlocks();
+    }
 
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
+    if (typeof StepCounter !== 'undefined') StepCounter.init();
+
+    const wd = new Date().getDay();
+    const gymMap = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
+    if (gymMap[wd] !== undefined) showGymDay(gymMap[wd]);
+    showDietDay(wd === 0 ? 6 : wd - 1);
+
+    const p = getProfile();
+    const pg = document.getElementById('goal-protein');
+    const wg = document.getElementById('goal-water');
+    if (pg) pg.value = p.proteinGoal || 160;
+    if (wg) wg.value = p.waterGoal || 3000;
+  } catch (err) {
+    console.error('Init error:', err);
   }
 
-  const p = getProfile();
-  const pg = document.getElementById('goal-protein');
-  const wg = document.getElementById('goal-water');
-  if (pg) pg.value = p.proteinGoal || 160;
-  if (wg) wg.value = p.waterGoal || 3000;
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js?v=10').catch(function () {});
+  }
 }
 
 window.confirmWake = confirmWake;
@@ -647,4 +736,8 @@ window.showDietDay = showDietDay;
 window.toggleHabit = toggleHabit;
 window.resetHabits = resetHabits;
 
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
