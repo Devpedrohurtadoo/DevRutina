@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mi Rutina">
+<title>Mi Rutina</title>
+<meta name="theme-color" content="#6366f1">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<script src="coach.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --card: #1c1c25;
+  --card2: #22222d;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --muted: #7a7a8e;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --coral: #f87171;
+  --teal: #2dd4bf;
+  --blue: #60a5fa;
+  --pink: #f472b6;
+  --r: 16px;
+  --r2: 12px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { background: var(--bg); }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+/* HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,15,0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 12px;
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.header-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+.header-title span { color: var(--accent2); }
+.time-display {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--bg3);
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.wake-selector {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.wake-label { font-size: 12px; color: var(--muted); margin-right: 2px; }
+.wake-btn {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.wake-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(10,10,15,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  padding: 10px 0 20px;
+  z-index: 100;
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 4px 0;
+}
+.nav-btn.active { color: var(--accent2); }
+.nav-icon { font-size: 22px; line-height: 1; }
+
+/* SECTIONS */
+.section { display: none; padding: 16px; }
+.section.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.card-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.card-icon {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.ci-purple { background: rgba(99,102,241,0.15); }
+.ci-green { background: rgba(34,197,94,0.15); }
+.ci-amber { background: rgba(245,158,11,0.15); }
+.ci-coral { background: rgba(248,113,113,0.15); }
+.ci-teal { background: rgba(45,212,191,0.15); }
+.ci-blue { background: rgba(96,165,250,0.15); }
+.ci-pink { background: rgba(244,114,182,0.15); }
+
+.card-title { font-size: 15px; font-weight: 600; }
+.card-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+.card-body { padding: 12px 16px; }
+
+/* TIMELINE */
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.timeline-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tl-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent2);
+  min-width: 42px;
+  padding-top: 2px;
+  font-weight: 500;
+}
+.tl-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.tl-content {}
+.tl-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.tl-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.tl-desc b { color: var(--text); font-weight: 500; }
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  margin: 2px 2px 0 0;
+  letter-spacing: 0.02em;
+}
+.tg { background: rgba(34,197,94,0.15); color: var(--green); }
+.tb { background: rgba(96,165,250,0.15); color: var(--blue); }
+.ta { background: rgba(245,158,11,0.15); color: var(--amber); }
+.tc { background: rgba(248,113,113,0.15); color: var(--coral); }
+.tp { background: rgba(99,102,241,0.15); color: var(--accent2); }
+.tt { background: rgba(45,212,191,0.15); color: var(--teal); }
+.tpk { background: rgba(244,114,182,0.15); color: var(--pink); }
+
+/* GYM EXERCISES */
+.exercise {
+  background: var(--bg3);
+  border-radius: var(--r2);
+  padding: 12px;
+  margin-bottom: 8px;
+}
+.exercise:last-child { margin-bottom: 0; }
+.exercise-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.exercise-name { font-size: 13px; font-weight: 600; flex: 1; }
+.exercise-sets {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.exercise-tip { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+.day-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.day-focus {
+  font-size: 10px;
+  background: rgba(255,255,255,0.2);
+  padding: 1px 8px;
+  border-radius: 10px;
+}
+
+/* MEAL CARDS */
+.meal {
+  background: var(--bg3);
+  border-radius: var(--r2);
+  padding: 12px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--accent);
+}
+.meal.alt1 { border-left-color: var(--green); }
+.meal.alt2 { border-left-color: var(--teal); }
+.meal.alt3 { border-left-color: var(--amber); }
+.meal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.meal-name { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.meal-time { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent2); }
+.meal-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.meal-items { font-size: 12px; color: var(--muted); line-height: 1.7; }
+.meal-items b { color: var(--text); font-weight: 500; }
+.meal-macros { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+
+/* INFO BOXES */
+.info {
+  border-radius: var(--r2);
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 8px;
+}
+.info.tip { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.15); }
+.info.warn { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.15); }
+.info.ok { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.15); }
+.info.imp { background: rgba(99,102,241,0.1); color: var(--accent2); border: 1px solid rgba(99,102,241,0.15); }
+.info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* PRODUCT LIST */
+.product-cat {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 0 6px;
+}
+.product-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.product-item:last-child { border-bottom: none; }
+.product-emoji { font-size: 22px; flex-shrink: 0; width: 34px; text-align: center; }
+.product-info {}
+.product-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.product-brand { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.product-use { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.product-prio {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  align-self: center;
+  flex-shrink: 0;
+}
+.prio-must { background: rgba(248,113,113,0.15); color: var(--coral); }
+.prio-rec { background: rgba(245,158,11,0.15); color: var(--amber); }
+.prio-opt { background: rgba(99,102,241,0.15); color: var(--accent2); }
+
+/* MACRO BAR */
+.macro-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.macro-label { font-size: 12px; color: var(--muted); min-width: 70px; }
+.macro-track { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+.macro-fill { height: 100%; border-radius: 3px; }
+.macro-val { font-size: 12px; font-weight: 600; min-width: 55px; text-align: right; font-family: 'DM Mono', monospace; }
+
+/* SECTION TITLE */
+.sec-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  letter-spacing: -0.3px;
+}
+.sec-title span { color: var(--accent2); }
+
+/* DAY TABS */
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.day-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.gym-day { display: none; }
+.gym-day.active { display: block; }
+
+.diet-day { display: none; }
+.diet-day.active { display: block; }
+
+/* PROGRESS DOTS */
+.step-list { }
+.step-item {
+  display: flex;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.step-item:last-child { border-bottom: none; }
+.step-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.step-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.step-desc b { color: var(--text); font-weight: 500; }
+
+/* CHECKBOX HABIT */
+.habit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.habit-item:last-child { border-bottom: none; }
+.habit-check {
+  width: 22px; height: 22px;
+  border: 2px solid var(--border2);
+  border-radius: 7px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+.habit-item.done .habit-check {
+  background: var(--green);
+  border-color: var(--green);
+}
+.habit-text { flex: 1; }
+.habit-title { font-size: 13px; font-weight: 500; }
+.habit-item.done .habit-title { text-decoration: line-through; color: var(--muted); }
+.habit-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.reset-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+.reset-btn:active { background: var(--card2); color: var(--text); }
+
+/* Hero welcome */
+.hero {
+  background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(45,212,191,0.08) 100%);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-greeting { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.hero-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+.hero-date { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.hero-stat {
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+}
+.hero-stat-val { font-size: 16px; font-weight: 700; color: var(--accent2); }
+.hero-stat-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+/* Highlight text */
+hl { color: var(--accent2); font-weight: 600; }
+
+/* Progress ring */
+.progress-ring-wrap { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+.progress-ring { position:relative; width:64px; height:64px; flex-shrink:0; }
+.progress-ring svg { transform:rotate(-90deg); }
+.progress-ring-bg { fill:none; stroke:var(--bg3); stroke-width:5; }
+.progress-ring-fill { fill:none; stroke:var(--green); stroke-width:5; stroke-linecap:round; transition:stroke-dashoffset 0.4s; }
+.progress-ring-text {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:var(--green);
+}
+
+/* Trackers */
+.tracker { margin-bottom:12px; }
+.tracker-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.tracker-label { font-size:13px; font-weight:600; }
+.tracker-val { font-family:'DM Mono',monospace; font-size:13px; color:var(--accent2); }
+.tracker-bar { height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; margin-bottom:10px; }
+.tracker-fill { height:100%; border-radius:4px; transition:width 0.3s; }
+.tracker-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.tracker-btn {
+  padding:8px 12px; border-radius:10px; border:1px solid var(--border2);
+  background:var(--bg3); color:var(--text); font-size:12px; font-weight:500;
+  font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s;
+}
+.tracker-btn:active { background:var(--accent); border-color:var(--accent); }
+.tracker-btn.sm { padding:6px 10px; font-size:11px; }
+
+/* Now card */
+.now-card {
+  background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(45,212,191,0.1));
+  border:1px solid rgba(99,102,241,0.25);
+  border-radius:var(--r); padding:16px; margin-bottom:16px;
+}
+.now-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.now-title { font-size:17px; font-weight:700; margin-bottom:4px; }
+.now-time { font-family:'DM Mono',monospace; font-size:12px; color:var(--accent2); margin-bottom:6px; }
+.now-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* Timer */
+.timer-box {
+  background:var(--bg3); border-radius:var(--r2); padding:16px;
+  text-align:center; margin-bottom:12px;
+}
+.timer-display {
+  font-family:'DM Mono',monospace; font-size:42px; font-weight:500;
+  color:var(--accent2); margin:8px 0;
+}
+.timer-presets { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px; }
+.timer-preset {
+  padding:8px 14px; border-radius:20px; border:1px solid var(--border2);
+  background:var(--card); color:var(--muted); font-size:12px; font-weight:600;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.timer-preset.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+.timer-actions { display:flex; gap:8px; justify-content:center; }
+.timer-action {
+  padding:10px 24px; border-radius:12px; border:none; font-size:14px; font-weight:600;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.timer-start { background:var(--green); color:#fff; }
+.timer-stop { background:var(--coral); color:#fff; }
+
+/* Gym log */
+.gym-log-input {
+  width:100%; padding:10px 12px; background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; color:var(--text); font-family:'DM Mono',monospace; font-size:13px;
+  margin-top:6px; outline:none;
+}
+.gym-log-input:focus { border-color:var(--accent); }
+.gym-log-input::placeholder { color:var(--muted); }
+.log-entry {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px 0; border-bottom:1px solid var(--border); font-size:12px;
+}
+.log-entry:last-child { border-bottom:none; }
+.log-date { color:var(--muted); font-family:'DM Mono',monospace; font-size:11px; }
+.log-val { font-weight:600; color:var(--accent2); }
+
+/* Form inputs */
+.form-row { display:flex; gap:8px; margin-bottom:10px; }
+.form-input {
+  flex:1; padding:10px 12px; background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px;
+  outline:none; min-width:0;
+}
+.form-input:focus { border-color:var(--accent); }
+.form-btn {
+  padding:10px 16px; background:var(--accent); border:none; border-radius:10px;
+  color:#fff; font-weight:600; font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+.streak-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  background:rgba(245,158,11,0.15); color:var(--amber);
+  font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;
+}
+.chart-bars { display:flex; align-items:flex-end; gap:4px; height:80px; margin-top:12px; }
+.chart-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.chart-bar {
+  width:100%; background:var(--accent); border-radius:4px 4px 0 0;
+  min-height:4px; transition:height 0.3s;
+}
+.chart-lbl { font-size:9px; color:var(--muted); font-family:'DM Mono',monospace; }
+
+.wake-bar { padding: 0 0 4px; }
+.wake-big-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  color: #fff; font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+}
+.wake-big-btn.done { background: var(--bg3); color: var(--green); border: 1px solid var(--green); box-shadow: none; }
+.wake-status { font-size: 11px; color: var(--muted); text-align: center; margin-top: 6px; font-family: 'DM Mono', monospace; }
+.wake-overlay {
+  position: fixed; inset: 0; z-index: 200; background: rgba(10,10,15,0.97);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; text-align: center;
+}
+.wake-overlay.hidden { display: none; }
+.wake-overlay h2 { font-size: 22px; margin-bottom: 8px; }
+.wake-overlay p { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.5; max-width: 320px; }
+.install-banner {
+  background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+  border-radius: var(--r); padding: 14px; margin-bottom: 14px; font-size: 12px; line-height: 1.6;
+}
+.install-banner b { color: var(--accent2); }
+.mode-pill {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 4px 10px;
+  border-radius: 20px; margin-left: 6px;
+}
+.mode-normal { background: rgba(34,197,94,0.15); color: var(--green); }
+.mode-away { background: rgba(245,158,11,0.15); color: var(--amber); }
+.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 180px); min-height: 400px; }
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 10px;
+}
+.chat-msg {
+  max-width: 88%; padding: 12px 14px; border-radius: 16px; font-size: 13px; line-height: 1.55;
+  white-space: pre-wrap; word-break: break-word;
+}
+.chat-msg.bot { align-self: flex-start; background: var(--card); border: 1px solid var(--border); }
+.chat-msg.user { align-self: flex-end; background: var(--accent); color: #fff; }
+.chat-msg b { color: var(--accent2); font-weight: 600; }
+.chat-msg.user b { color: #fff; }
+.chat-input-row {
+  display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.chat-input {
+  flex: 1; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+  outline: none;
+}
+.chat-send {
+  padding: 12px 18px; border: none; border-radius: 14px; background: var(--accent);
+  color: #fff; font-weight: 600; cursor: pointer; font-size: 14px;
+}
+.quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.quick-chip {
+  padding: 8px 12px; border-radius: 20px; border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--muted); font-size: 11px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.mas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mas-tile {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 20px 14px; text-align: center; cursor: pointer; transition: background 0.15s;
+}
+.mas-tile:active { background: var(--card2); }
+.mas-tile-icon { font-size: 28px; margin-bottom: 8px; }
+.mas-tile-lbl { font-size: 13px; font-weight: 600; }
+.back-bar {
+  display: none; align-items: center; gap: 8px; margin-bottom: 12px;
+  font-size: 14px; color: var(--accent2); cursor: pointer; font-weight: 600;
+}
+.back-bar.visible { display: flex; }
+body.standalone .install-banner { display: none; }
+.nav-btn .nav-icon { font-size: 20px; }
+.nav-btn { font-size: 9px; }
+
+</style>
+</head>
+<body>
+
+<div id="wake-overlay" class="wake-overlay">
+  <h2>🌙 Nuevo día</h2>
+  <p>Todo se reinició a las 00:00. Cuando te despiertes, pulsa el botón para calcular tu rutina, comidas, gym y skincare desde esa hora.</p>
+  <button class="wake-big-btn" onclick="confirmWake()">☀️ ¡Me he despertado!</button>
+</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="header-title">Mi <span>Rutina</span></div>
+    <div class="time-display" id="clock">00:00</div>
+  </div>
+  <div class="wake-bar">
+    <button class="wake-big-btn" id="wake-btn" onclick="confirmWake()">☀️ ¡Me he despertado!</button>
+    <div class="wake-status" id="wake-status">Pulsa al despertar para iniciar tu día</div>
+  </div>
+</div>
+
+<!-- ========= SECTION: HOY ========= -->
+<div class="section active" id="sec-hoy">
+  <div class="install-banner" id="install-banner">
+    <b>📱 Instalar en iPhone (gratis):</b> Safari → Compartir ↑ → <b>Añadir a pantalla de inicio</b>. Funciona sin internet.
+  </div>
+  <div class="hero">
+    <div class="hero-greeting" id="hero-greeting">Buenas 👋</div>
+    <div class="hero-name">Tu día de hoy</div>
+    <div class="hero-date" id="hero-date">Cargando...</div>
+    <div style="margin-bottom:10px;"><span class="streak-badge" id="streak-badge">🔥 0 días seguidos</span></div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="stat-habits">0%</div>
+        <div class="hero-stat-lbl">Hábitos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="stat-water">0L</div>
+        <div class="hero-stat-lbl">Agua</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="stat-protein">0g</div>
+        <div class="hero-stat-lbl">Proteína</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="now-card" id="now-card">
+    <div class="now-label">Ahora toca</div>
+    <div class="now-title" id="now-title">—</div>
+    <div class="now-time" id="now-time">—</div>
+    <div class="now-desc" id="now-desc">Calculando tu siguiente paso...</div>
+  </div>
+
+  <div class="sec-title">Seguimiento <span>diario</span></div>
+  <div class="card">
+    <div class="card-body">
+      <div class="tracker">
+        <div class="tracker-header">
+          <span class="tracker-label">💧 Agua</span>
+          <span class="tracker-val" id="water-val">0 / 3000 ml</span>
+        </div>
+        <div class="tracker-bar"><div class="tracker-fill" id="water-fill" style="width:0%;background:var(--blue);"></div></div>
+        <div class="tracker-btns">
+          <button class="tracker-btn" onclick="addWater(250)">+250ml</button>
+          <button class="tracker-btn" onclick="addWater(500)">+500ml</button>
+          <button class="tracker-btn sm" onclick="addWater(-250)">−250</button>
+          <button class="tracker-btn sm" onclick="setWater(3000)">✓ Meta</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="tracker">
+        <div class="tracker-header">
+          <span class="tracker-label">🥩 Proteína</span>
+          <span class="tracker-val" id="protein-val">0 / 160 g</span>
+        </div>
+        <div class="tracker-bar"><div class="tracker-fill" id="protein-fill" style="width:0%;background:var(--green);"></div></div>
+        <div class="tracker-btns">
+          <button class="tracker-btn" onclick="addProtein(20)">+20g</button>
+          <button class="tracker-btn" onclick="addProtein(30)">+30g</button>
+          <button class="tracker-btn" onclick="addProtein(40)">+40g</button>
+          <button class="tracker-btn sm" onclick="addProtein(-20)">−20</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Hábitos de hoy <span>✓</span></div>
+  <div class="progress-ring-wrap">
+    <div class="progress-ring">
+      <svg width="64" height="64" viewBox="0 0 64 64">
+        <circle class="progress-ring-bg" cx="32" cy="32" r="28"/>
+        <circle class="progress-ring-fill" id="habit-ring" cx="32" cy="32" r="28"
+          stroke-dasharray="175.9" stroke-dashoffset="175.9"/>
+      </svg>
+      <div class="progress-ring-text" id="habit-pct">0%</div>
+    </div>
+    <div style="flex:1;font-size:12px;color:var(--muted);line-height:1.5;">
+      Se guardan automáticamente y se reinician cada medianoche.
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding-top:8px;">
+      <div class="habit-item" data-habit="0" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">💧 3 litros de agua</div>
+          <div class="habit-sub">Empieza con 500ml al despertar</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="1" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">🦷 Higiene bucal completa</div>
+          <div class="habit-sub">Rascador + cepillo + hilo + enjuague</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="2" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">✨ Skincare mañana</div>
+          <div class="habit-sub">Limpiador → Vit C → SPF</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="3" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">🥩 Proteína: 160g mínimo</div>
+          <div class="habit-sub">Distribuida en todas las comidas</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="4" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">🏋️ Entreno de hoy</div>
+          <div class="habit-sub" id="habit-gym-day">Ver sección Gym</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="5" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">🛡️ Antitranspirante de noche</div>
+          <div class="habit-sub">Axilas secas antes de dormir</div>
+        </div>
+      </div>
+      <div class="habit-item" data-habit="6" onclick="toggleHabit(this)">
+        <div class="habit-check"></div>
+        <div class="habit-text">
+          <div class="habit-title">😴 8-9 horas de sueño</div>
+          <div class="habit-sub">Teléfono boca abajo 1h antes</div>
+        </div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetHabits()">Reiniciar hábitos del día</button>
+  </div>
+</div>
+
+<!-- ========= SECTION: RUTINA ========= -->
+<div class="section" id="sec-rutina">
+  <div class="sec-title">Rutina <span>diaria</span></div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-amber">☀️</div>
+      <div>
+        <div class="card-title">Mañana</div>
+        <div class="card-sub" id="morning-sub">Horario según tu despertar</div>
+      </div>
+    </div>
+    <div class="card-body" id="morning-timeline">
+      <!-- JS generated -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-purple">🕑</div>
+      <div>
+        <div class="card-title">Tarde</div>
+        <div class="card-sub">Comidas + gym</div>
+      </div>
+    </div>
+    <div class="card-body" id="afternoon-timeline"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-blue">🌙</div>
+      <div>
+        <div class="card-title">Noche</div>
+        <div class="card-sub">Cierre del día</div>
+      </div>
+    </div>
+    <div class="card-body" id="night-timeline"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-green">🪥</div>
+      <div>
+        <div class="card-title">Skincare — paso a paso</div>
+        <div class="card-sub">Mañana y noche</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">☀️ Mañana (6 min)</div>
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Limpiador facial suave</div><div class="step-desc">CeraVe Hydrating Cleanser o La Roche-Posay Effaclar. Agua tibia, frota 30 seg, aclara.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Sérum Vitamina C</div><div class="step-desc">The Ordinary Vitamin C 10% o TruSkin Vitamin C. 2-3 gotitas, extiende bien. Aclara manchas y unifica tono.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Hidratante con SPF 30</div><div class="step-desc">Isdin Fusion Water SPF 30 o Eucerin Sun Gel-Crema. Siempre mañana, aunque no salgas.</div></div></div>
+      <div class="divider"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">🌙 Noche (5 min)</div>
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Limpiador (igual que mañana)</div><div class="step-desc">Elimina el sebo, sudor y protección solar del día.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Niacinamida 10% (cada noche)</div><div class="step-desc">The Ordinary Niacinamide + Zinc. Cierra poros, reduce rojeces, unifica tono. Baratísimo y muy efectivo.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Retinol 0.025% (2-3x semana)</div><div class="step-desc">The Ordinary Retinol 0.2% en Escualano. Solo noche, empieza despacio. Mejora textura y marcas.</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Hidratante noche sin SPF</div><div class="step-desc">Neutrogena Hydro Boost o CeraVe Moisturizing Cream. Sella toda la rutina.</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-teal">🦷</div>
+      <div>
+        <div class="card-title">Higiene bucal — protocolo</div>
+        <div class="card-sub">Elimina el mal aliento en 3-5 días</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Rascador de lengua</div><div class="step-desc"><b>Primero siempre.</b> Rasca de atrás hacia delante 5-7 veces. Limpia el biofilm blanco causante del olor.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Cepilla 2 minutos</div><div class="step-desc">Movimientos circulares. Cepillo suave o eléctrico (Oral-B Pro 2 mínimo). Incluye la línea de la encía.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Hilo dental</div><div class="step-desc">30 cm de hilo, entre todos los dientes. Huele el hilo después: ahí es de donde venía el olor.</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Enjuague clorhexidina 0.12%</div><div class="step-desc">Perio-Aid o Periokin. 30 segundos sin tragar. No comas 30 min después. Mata las bacterias de raíz.</div></div></div>
+      <div class="info tip" style="margin-top:8px;"><div class="info-icon">💡</div><div>Por la noche haz la rutina completa. Por la mañana puedes saltarte el hilo si tienes prisa, pero nunca el rascador + cepillo + enjuague.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon ci-coral">💪</div>
+      <div>
+        <div class="card-title">Anti-olor axilas</div>
+        <div class="card-sub">Protocolo definitivo</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Jabón antibacteriano en la ducha</div><div class="step-desc">Safeguard, Lifebuoy o Sanex Zero. Frota axilas 30-40 segundos reales con ese jabón específico.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Seca COMPLETAMENTE</div><div class="step-desc">Toalla limpia, espera 1-2 min. Piel húmeda = desodorante inútil.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">Antitranspirante DE NOCHE</div><div class="step-desc"><b>No por la mañana.</b> Aplícalo antes de dormir. Rexona Clinical 72h, Sure Maximum Protection, o Mitchum. El cloruro de aluminio actúa mientras duermes.</div></div></div>
+      <div class="info ok" style="margin-top:8px;"><div class="info-icon">✅</div><div>Ropa de algodón siempre. Poliéster acumula olor incluso limpio. Lava ropa a 40°C mínimo.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION: GYM ========= -->
+<div class="section" id="sec-gym">
+  <div class="sec-title">Gym <span>PPL</span></div>
+
+  <div class="info imp"><div class="info-icon">📋</div><div>Push·Pull·Pierna·Push·Pull | Lu·Ma·Mi·Ju·Vi | Sábado y domingo descanso activo</div></div>
+
+  <div class="day-tabs" id="gym-tabs">
+    <button class="day-tab active" onclick="showGymDay(0)">Lun Push</button>
+    <button class="day-tab" onclick="showGymDay(1)">Mar Pull</button>
+    <button class="day-tab" onclick="showGymDay(2)">Mié Pierna</button>
+    <button class="day-tab" onclick="showGymDay(3)">Jue Push2</button>
+    <button class="day-tab" onclick="showGymDay(4)">Vie Pull2</button>
+  </div>
+
+  <!-- LUNES -->
+  <div class="gym-day active" id="gym-0">
+    <div class="day-pill">💪 Lunes <span class="day-focus">PUSH · Pecho · Hombros · Tríceps</span></div>
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press de banca plano (barra)</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Ejercicio rey del pecho. Baja 3 seg lento, sube explosivo. Descansa 2-3 min entre series. Agarre ligeramente más ancho que hombros.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado mancuernas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Banco a 30-45°. Trabaja parte alta del pecho. Clave para verse grande de frente. Rango completo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Aperturas pecho cable/máquina</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Tensión constante. Siente el estiramiento en el pecho. Peso ligero, forma perfecta.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press militar barra (hombros)</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">De pie o sentado. Core activado. No arquees la lumbar. Hombros y tríceps.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Elevaciones laterales</div><div class="exercise-sets">4×12-15</div></div><div class="exercise-tip">Pesos ligeros, forma perfecta. Brazos anchos = cintura visualmente más estrecha. El truco visual más potente.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Tríceps en polea (barra/cuerda)</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Codos fijos al cuerpo. Extensión completa. Alterna entre barra recta y cuerda.</div></div>
+      <div class="info ok" style="margin-top:4px;"><div class="info-icon">🔥</div><div>Calentamiento: 5 min bici/cinta + 1 serie ligera de cada ejercicio principal antes de empezar.</div></div>
+    </div></div>
+  </div>
+
+  <!-- MARTES -->
+  <div class="gym-day" id="gym-1">
+    <div class="day-pill">🔙 Martes <span class="day-focus">PULL · Espalda · Bíceps</span></div>
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Dominadas o jalón al pecho</div><div class="exercise-sets">4×6-10</div></div><div class="exercise-tip">El mejor ejercicio para espalda ancha. Si no llegas a 6 dominadas, usa jalón en máquina o banda elástica de ayuda. Agarre prono, ancho.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo con barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Tirón hacia el ombligo, espalda recta (no doblada), codos pegados. Peso moderado con buena técnica. Da espalda gruesa.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo polea baja agarre neutro</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Complementa el remo con barra. Más control y conexión mente-músculo con la espalda baja.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl bíceps con barra</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Codos fijos, no hagas trampa con el cuerpo. Sube 1 seg, baja 2 seg. Aprieta en la cima.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl martillo mancuernas</div><div class="exercise-sets">3×12 c/lado</div></div><div class="exercise-tip">Agarre neutro (como un martillo). Desarrolla el braquial y braquiorradial = bíceps visualmente más grueso.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl concentrado</div><div class="exercise-sets">2×12-15 c/lado</div></div><div class="exercise-tip">Sentado, codo en la rodilla. Máximo pico de bíceps. Finisher perfecto. Siente la contracción.</div></div>
+    </div></div>
+  </div>
+
+  <!-- MIÉRCOLES -->
+  <div class="gym-day" id="gym-2">
+    <div class="day-pill">🦵 Miércoles <span class="day-focus">PIERNA COMPLETA</span></div>
+    <div class="info warn"><div class="info-icon">⚠️</div><div>Pierna = 50% de tu masa muscular. Genera más testosterona y GH que cualquier otro entrenamiento. Dale todo aunque sea 1 día.</div></div>
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Sentadilla libre con barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Rey de los ejercicios. Aprende técnica antes de meter peso. Pies a la anchura de hombros, punta ligeramente hacia afuera. Baja hasta que muslos paralelos al suelo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Prensa de piernas</div><div class="exercise-sets">4×10-12</div></div><div class="exercise-tip">Complementa la sentadilla. Puedes mover más peso. Pies en el centro, no bloquees las rodillas arriba.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensiones de cuádriceps</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Aislamiento puro de cuádriceps. Pausa 1 seg arriba, baja lento. Importante para definición frontal.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl femoral tumbado</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Isquiotibiales. Equilibra trabajo y protege rodillas de lesiones. Baja lento.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Hip thrust o peso muerto rumano</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Hip thrust para glúteo y femoral. Peso muerto rumano si prefieres más isquio. Cualquiera de los dos.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Gemelos de pie en máquina</div><div class="exercise-sets">4×15-20</div></div><div class="exercise-tip">Recorrido completo: baja los talones al máximo, sube en punta de pie máximo. Pausa 1 seg arriba. Los gemelos responden mejor a más repeticiones.</div></div>
+    </div></div>
+  </div>
+
+  <!-- JUEVES -->
+  <div class="gym-day" id="gym-3">
+    <div class="day-pill">💪 Jueves <span class="day-focus">PUSH 2 · Variante</span></div>
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press inclinado barra</div><div class="exercise-sets">4×8-10</div></div><div class="exercise-tip">Esta semana enfocamos pecho alto. Banco a 30°, agarre medio. La parte superior del pecho da volumen enorme.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Aperturas banco plano mancuernas</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Estiramiento máximo en pecho. Peso muy ligero. La sensación muscular es lo que importa, no el peso.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Press Arnold mancuernas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">El favorito de Arnold. Empieza con palmas hacia ti, gira al subir. Trabaja los 3 cabezas del deltoides.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Elevaciones frontales alternas</div><div class="exercise-sets">3×12 c/lado</div></div><div class="exercise-tip">Deltoides anterior. Alterna brazos para más control. Hombros redondos y estéticos.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Fondos en paralelas</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Cuerpo recto = más tríceps. Ligeramente inclinado adelante = más pecho. Ambas variantes son buenas.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Extensiones tríceps sobre cabeza</div><div class="exercise-sets">3×12-15</div></div><div class="exercise-tip">Con mancuerna o barra EZ. Estira la cabeza larga del tríceps. Fundamental para brazos grandes de verdad.</div></div>
+    </div></div>
+  </div>
+
+  <!-- VIERNES -->
+  <div class="gym-day" id="gym-4">
+    <div class="day-pill">🔙 Viernes <span class="day-focus">PULL 2 · Variante</span></div>
+    <div class="card"><div class="card-body">
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Jalón agarre estrecho/neutro</div><div class="exercise-sets">4×10-12</div></div><div class="exercise-tip">Agarre neutro o supino. Activa más bíceps y parte baja de dorsales. Tira llevando codos hacia caderas.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Remo mancuerna 1 brazo</div><div class="exercise-sets">4×10 c/lado</div></div><div class="exercise-tip">Corrige desequilibrios entre lados. Máximo rango. Rodilla y mano en el banco. Tira el codo hacia el techo.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Face pull en polea alta</div><div class="exercise-sets">3×15-20</div></div><div class="exercise-tip">Cuerda a la altura de la cara, tira hacia la frente separando la cuerda. Rotadores externos y deltoides posterior. Salud de hombros y postura.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl barra EZ o Z</div><div class="exercise-sets">3×10-12</div></div><div class="exercise-tip">Menos estrés en muñecas que barra recta. Movimiento completo. Agarre medio.</div></div>
+      <div class="exercise"><div class="exercise-row"><div class="exercise-name">Curl polea baja (finisher)</div><div class="exercise-sets">3×15-20</div></div><div class="exercise-tip">Tensión constante en todo el recorrido a diferencia de mancuernas. Quema final. Descansa poco entre series.</div></div>
+      <div class="info ok" style="margin-top:4px;"><div class="info-icon">🏆</div><div>Sábado y domingo: paseo, fútbol suave, natación, bici. El músculo crece en el descanso.</div></div>
+    </div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <div class="card-header"><div class="card-icon ci-teal">⏱️</div><div><div class="card-title">Temporizador de descanso</div><div class="card-sub">Entre series</div></div></div>
+    <div class="card-body">
+      <div class="timer-box">
+        <div class="timer-presets">
+          <button class="timer-preset" onclick="setTimerPreset(90,this)">90s</button>
+          <button class="timer-preset active" onclick="setTimerPreset(120,this)">2 min</button>
+          <button class="timer-preset" onclick="setTimerPreset(150,this)">2:30</button>
+          <button class="timer-preset" onclick="setTimerPreset(180,this)">3 min</button>
+        </div>
+        <div class="timer-display" id="timer-display">2:00</div>
+        <div class="timer-actions">
+          <button class="timer-action timer-start" id="timer-btn" onclick="toggleTimer()">Iniciar</button>
+          <button class="timer-action timer-stop" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-blue">📝</div><div><div class="card-title">Registro de hoy</div><div class="card-sub">Pesos y repeticiones</div></div></div>
+    <div class="card-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Ej: Press banca 60kg x8 x8 x7</div>
+      <textarea class="gym-log-input" id="gym-log-today" rows="4" placeholder="Escribe tus series de hoy..." oninput="saveGymLog()"></textarea>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <div class="card-header"><div class="card-icon ci-amber">📐</div><div><div class="card-title">Reglas de oro</div></div></div>
+    <div class="card-body">
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-title">Progresión de cargas semanal</div><div class="step-desc">Cada semana intenta +1-2kg o +1 rep. Sin progresión no hay músculo. Anótalo en el móvil.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-title">Técnica > Peso siempre</div><div class="step-desc">Con 2 meses de experiencia la técnica perfecta da más músculo que mucho peso. Sin excepciones.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-title">RIR 1-2 (casi al fallo)</div><div class="step-desc">Para cuando te quedan 1-2 repeticiones en el tanque. Más seguro y más volumen total.</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-title">Descanso entre series: 90-150 seg</div><div class="step-desc">Ejercicios compuestos: 2-3 min. Ejercicios de aislamiento: 60-90 seg. Usa el temporizador.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION: DIETA ========= -->
+<div class="section" id="sec-dieta">
+  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
+  <div class="sec-title">Dieta <span>variada</span></div>
+
+  <div class="card"><div class="card-body">
+    <div class="macro-row"><div class="macro-label">Proteína</div><div class="macro-track"><div class="macro-fill" style="width:65%;background:var(--green);"></div></div><div class="macro-val" style="color:var(--green);">160-175g</div></div>
+    <div class="macro-row"><div class="macro-label">Carbohidratos</div><div class="macro-track"><div class="macro-fill" style="width:85%;background:var(--blue);"></div></div><div class="macro-val" style="color:var(--blue);">260-300g</div></div>
+    <div class="macro-row"><div class="macro-label">Grasas</div><div class="macro-track"><div class="macro-fill" style="width:35%;background:var(--amber);"></div></div><div class="macro-val" style="color:var(--amber);">60-70g</div></div>
+    <div class="macro-row"><div class="macro-label">Calorías</div><div class="macro-track"><div class="macro-fill" style="width:100%;background:var(--accent);"></div></div><div class="macro-val" style="color:var(--accent2);">~2600 kcal</div></div>
+  </div></div>
+
+  <div class="day-tabs" id="diet-tabs">
+    <button class="day-tab active" onclick="showDietDay(0)">Día 1</button>
+    <button class="day-tab" onclick="showDietDay(1)">Día 2</button>
+    <button class="day-tab" onclick="showDietDay(2)">Día 3</button>
+    <button class="day-tab" onclick="showDietDay(3)">Día 4</button>
+    <button class="day-tab" onclick="showDietDay(4)">Día 5</button>
+    <button class="day-tab" onclick="showDietDay(5)">Día 6</button>
+    <button class="day-tab" onclick="showDietDay(6)">Día 7</button>
+  </div>
+
+  <div class="diet-day active" id="diet-0">
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d0-des">09:30</div></div><div class="meal-title">Huevos revueltos + tostadas</div><div class="meal-items">• <b>4 huevos revueltos</b> con tomate y orégano<br>• <b>2 tostadas de pan integral</b> con tomate rallado<br>• <b>1 vaso de leche entera</b><br>• <b>1 naranja o kiwi</b></div><div class="meal-macros"><span class="tag tg">47g prot</span><span class="tag tb">55g carbs</span><span class="tag ta">18g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time" id="d0-mm">11:30</div></div><div class="meal-title">Yogur griego + frutos secos</div><div class="meal-items">• <b>200g yogur griego natural</b> sin azúcar<br>• <b>1 puñado de almendras</b> (20-25g)<br>• <b>1 plátano</b></div><div class="meal-macros"><span class="tag tg">22g prot</span><span class="tag tb">42g carbs</span><span class="tag ta">12g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Pollo con arroz y verduras</div><div class="meal-items">• <b>200g pechuga de pollo</b> a la plancha<br>• <b>200g arroz blanco</b> cocido<br>• <b>Ensalada grande:</b> lechuga, tomate, pepino, zanahoria<br>• <b>AOVE</b> para aliñar</div><div class="meal-macros"><span class="tag tg">52g prot</span><span class="tag tb">78g carbs</span><span class="tag ta">10g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Sandwich proteico</div><div class="meal-items">• <b>2 rebanadas pan integral</b><br>• <b>100g pechuga de pavo</b><br>• <b>1 loncha queso bajo en grasa</b><br>• <b>Tomate y lechuga</b></div><div class="meal-macros"><span class="tag tg">32g prot</span><span class="tag tb">48g carbs</span><span class="tag ta">6g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d0-pg">20:00</div></div><div class="meal-title">Batido de proteína + fruta</div><div class="meal-items">• <b>1 scoop whey protein</b> (25-30g proteína)<br>• <b>250ml leche o agua</b><br>• <b>1 plátano</b></div><div class="meal-macros"><span class="tag tg">35g prot</span><span class="tag tb">38g carbs</span><span class="tag ta">3g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Tortilla de claras con verduras</div><div class="meal-items">• <b>4 claras + 2 huevos enteros</b><br>• <b>Pimiento, cebolla, espinacas</b><br>• <b>2 rebanadas de pan integral</b></div><div class="meal-macros"><span class="tag tg">38g prot</span><span class="tag tb">28g carbs</span><span class="tag ta">10g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-1">
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d1-des">09:30</div></div><div class="meal-title">Tostadas con atún y huevo</div><div class="meal-items">• <b>2 tostadas integrales</b><br>• <b>1 lata de atún al natural</b><br>• <b>2 huevos cocidos</b><br>• <b>1 vaso de zumo de naranja</b></div><div class="meal-macros"><span class="tag tg">45g prot</span><span class="tag tb">50g carbs</span><span class="tag ta">10g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Queso cottage + fruta</div><div class="meal-items">• <b>200g queso cottage</b><br>• <b>1 manzana</b> en trocitos<br>• <b>1 puñado de nueces</b></div><div class="meal-macros"><span class="tag tg">24g prot</span><span class="tag tb">35g carbs</span><span class="tag ta">14g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Salmón con patata y ensalada</div><div class="meal-items">• <b>200g salmón</b> al horno o plancha<br>• <b>250g patata cocida</b> o al vapor<br>• <b>Ensalada: tomate, zanahoria, maíz</b><br>• Limón y AOVE</div><div class="meal-macros"><span class="tag tg">46g prot</span><span class="tag tb">65g carbs</span><span class="tag ta">18g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Plátano + batido proteína</div><div class="meal-items">• <b>1 scoop whey protein</b> con agua<br>• <b>2 plátanos</b></div><div class="meal-macros"><span class="tag tg">28g prot</span><span class="tag tb">55g carbs</span><span class="tag ta">2g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d1-pg">20:00</div></div><div class="meal-title">Arroz con pollo rápido</div><div class="meal-items">• <b>150g pollo</b> troceado<br>• <b>200g arroz</b> cocido<br>• <b>Salsa de soja baja en sodio</b> + verduras</div><div class="meal-macros"><span class="tag tg">42g prot</span><span class="tag tb">70g carbs</span><span class="tag ta">5g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Merluza con verduras al horno</div><div class="meal-items">• <b>200g merluza o dorada</b><br>• <b>Pimiento, calabacín, tomate cherry</b> al horno<br>• <b>Pan integral (1 rebanada)</b></div><div class="meal-macros"><span class="tag tg">40g prot</span><span class="tag tb">22g carbs</span><span class="tag ta">6g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-2">
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d2-des">09:30</div></div><div class="meal-title">Tortilla francesa + leche con cacao</div><div class="meal-items">• <b>4 huevos</b> en tortilla<br>• <b>2 tostadas integrales</b> con aceite<br>• <b>Vaso de leche</b> con cacao puro sin azúcar</div><div class="meal-macros"><span class="tag tg">44g prot</span><span class="tag tb">52g carbs</span><span class="tag ta">20g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Pavo + fruta + frutos secos</div><div class="meal-items">• <b>100g pechuga de pavo</b> en fiambre natural<br>• <b>1 pera o melocotón</b><br>• <b>20g pistachos</b></div><div class="meal-macros"><span class="tag tg">26g prot</span><span class="tag tb">30g carbs</span><span class="tag ta">10g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Ternera con pasta y tomate</div><div class="meal-items">• <b>180g ternera</b> magra a la plancha<br>• <b>200g pasta integral</b> cocida<br>• <b>Salsa de tomate natural</b> casera<br>• Ajo y orégano</div><div class="meal-macros"><span class="tag tg">50g prot</span><span class="tag tb">75g carbs</span><span class="tag ta">12g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Yogur griego + galletas de arroz</div><div class="meal-items">• <b>150g yogur griego</b><br>• <b>4 galletas de arroz</b><br>• <b>1 plátano</b></div><div class="meal-macros"><span class="tag tg">18g prot</span><span class="tag tb">52g carbs</span><span class="tag ta">4g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d2-pg">20:00</div></div><div class="meal-title">Batido + arroz con leche proteico</div><div class="meal-items">• <b>1 scoop whey</b><br>• <b>150g arroz</b> con leche desnatada<br>• <b>Canela</b> al gusto</div><div class="meal-macros"><span class="tag tg">40g prot</span><span class="tag tb">60g carbs</span><span class="tag ta">4g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Ensalada completa con atún y huevo</div><div class="meal-items">• <b>2 latas de atún</b> al natural<br>• <b>2 huevos cocidos</b><br>• <b>Lechuga, tomate, pimiento, maíz</b><br>• Vinagre y AOVE</div><div class="meal-macros"><span class="tag tg">42g prot</span><span class="tag tb">18g carbs</span><span class="tag ta">12g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-3">
+    <div class="meal"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d3-des">09:30</div></div><div class="meal-title">Huevos con jamón + zumo</div><div class="meal-items">• <b>3 huevos fritos</b> con jamón serrano (2 lonchas)<br>• <b>2 tostadas</b><br>• <b>Zumo de naranja natural</b></div><div class="meal-macros"><span class="tag tg">40g prot</span><span class="tag tb">48g carbs</span><span class="tag ta">22g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Batido de proteína</div><div class="meal-items">• <b>1 scoop whey</b> con 250ml leche<br>• <b>1 manzana</b></div><div class="meal-macros"><span class="tag tg">35g prot</span><span class="tag tb">40g carbs</span><span class="tag ta">5g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Lentejas con arroz (proteína vegetal)</div><div class="meal-items">• <b>250g lentejas cocidas</b><br>• <b>150g arroz</b><br>• <b>Zanahoria, tomate, cebolla</b> en el guiso<br>• Pimentón y comino</div><div class="meal-macros"><span class="tag tg">35g prot</span><span class="tag tb">85g carbs</span><span class="tag ta">4g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Pan con pavo y tomate</div><div class="meal-items">• <b>2 rebanadas pan integral</b><br>• <b>120g pechuga de pavo</b><br>• <b>Tomate, lechuga</b></div><div class="meal-macros"><span class="tag tg">30g prot</span><span class="tag tb">46g carbs</span><span class="tag ta">4g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d3-pg">20:00</div></div><div class="meal-title">Batido + plátano</div><div class="meal-items">• <b>1 scoop whey</b><br>• <b>2 plátanos</b><br>• <b>Vaso de leche</b></div><div class="meal-macros"><span class="tag tg">38g prot</span><span class="tag tb">60g carbs</span><span class="tag ta">5g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Pollo al horno con judías verdes</div><div class="meal-items">• <b>200g muslo de pollo</b> sin piel al horno<br>• <b>200g judías verdes</b> salteadas con ajo<br>• <b>1 rebanada pan integral</b></div><div class="meal-macros"><span class="tag tg">42g prot</span><span class="tag tb">20g carbs</span><span class="tag ta">14g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-4">
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d4-des">09:30</div></div><div class="meal-title">Batido proteico + tostadas</div><div class="meal-items">• <b>1 scoop whey</b> con 250ml leche<br>• <b>2 tostadas con jamón cocido</b> bajo en grasa<br>• <b>1 kiwi</b></div><div class="meal-macros"><span class="tag tg">48g prot</span><span class="tag tb">55g carbs</span><span class="tag ta">6g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Yogur + plátano + almendras</div><div class="meal-items">• <b>200g yogur griego</b><br>• <b>1 plátano grande</b><br>• <b>20g almendras</b></div><div class="meal-macros"><span class="tag tg">22g prot</span><span class="tag tb">45g carbs</span><span class="tag ta">10g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Atún con arroz y ensalada</div><div class="meal-items">• <b>2 latas atún</b> + 1 huevo cocido<br>• <b>200g arroz</b><br>• <b>Ensalada mediterránea:</b> tomate, pepino, cebolla, olivas</div><div class="meal-macros"><span class="tag tg">50g prot</span><span class="tag tb">72g carbs</span><span class="tag ta">12g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Galletas de arroz + queso fresco</div><div class="meal-items">• <b>4 galletas de arroz</b><br>• <b>100g queso fresco batido</b><br>• <b>1 plátano</b></div><div class="meal-macros"><span class="tag tg">16g prot</span><span class="tag tb">55g carbs</span><span class="tag ta">2g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d4-pg">20:00</div></div><div class="meal-title">Pollo + arroz express</div><div class="meal-items">• <b>150g pollo</b> a la plancha<br>• <b>Arroz en bolsa express</b> (200g)<br>• <b>Salsa de tomate</b></div><div class="meal-macros"><span class="tag tg">40g prot</span><span class="tag tb">65g carbs</span><span class="tag ta">5g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Revuelto de huevos con espinacas</div><div class="meal-items">• <b>4 huevos</b> revueltos<br>• <b>Espinacas frescas</b> salteadas<br>• <b>2 tostadas integrales</b></div><div class="meal-macros"><span class="tag tg">36g prot</span><span class="tag tb">28g carbs</span><span class="tag ta">18g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-5">
+    <div class="meal"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d5-des">09:30</div></div><div class="meal-title">Huevos benedict express</div><div class="meal-items">• <b>3 huevos</b> pochados o en plancha<br>• <b>2 tostadas</b><br>• <b>2 lonchas jamón serrano</b><br>• <b>Zumo de naranja</b></div><div class="meal-macros"><span class="tag tg">38g prot</span><span class="tag tb">50g carbs</span><span class="tag ta">18g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Requesón con fruta</div><div class="meal-items">• <b>200g requesón</b> (o Skyr)<br>• <b>Trozos de fruta variada:</b> fresa, uva, mandarina<br>• <b>1 cucharada miel</b></div><div class="meal-macros"><span class="tag tg">24g prot</span><span class="tag tb">38g carbs</span><span class="tag ta">4g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Pechuga a la plancha con quinoa</div><div class="meal-items">• <b>200g pechuga de pollo</b><br>• <b>180g quinoa</b> cocida<br>• <b>Tomate, pimiento, cebolla</b> asados<br>• Limón y hierbas</div><div class="meal-macros"><span class="tag tg">54g prot</span><span class="tag tb">68g carbs</span><span class="tag ta">8g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Pre-gym</div><div class="meal-time">17:00</div></div><div class="meal-title">Batido + galletas de arroz</div><div class="meal-items">• <b>1 scoop whey con agua</b><br>• <b>4 galletas de arroz</b><br>• <b>1 manzana</b></div><div class="meal-macros"><span class="tag tg">28g prot</span><span class="tag tb">48g carbs</span><span class="tag ta">2g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Post-gym</div><div class="meal-time" id="d5-pg">20:00</div></div><div class="meal-title">Batido + banana bread proteico</div><div class="meal-items">• <b>1 scoop whey con leche</b><br>• <b>2 plátanos maduros</b> + 2 huevos (batido y hecho en microondas 2 min)</div><div class="meal-macros"><span class="tag tg">44g prot</span><span class="tag tb">55g carbs</span><span class="tag ta">8g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:30</div></div><div class="meal-title">Gambas a la plancha con arroz</div><div class="meal-items">• <b>200g gambas peladas</b><br>• <b>150g arroz</b><br>• <b>Ajo, perejil, limón</b></div><div class="meal-macros"><span class="tag tg">40g prot</span><span class="tag tb">40g carbs</span><span class="tag ta">6g grasas</span></div></div>
+  </div>
+
+  <div class="diet-day" id="diet-6">
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Desayuno</div><div class="meal-time" id="d6-des">09:30</div></div><div class="meal-title">Pancakes de proteína</div><div class="meal-items">• <b>3 huevos + 1 scoop whey</b> + un chorro de leche (mezcla y fríe)<br>• <b>Sirope sin azúcar</b> o fruta encima<br>• <b>Vaso de leche</b></div><div class="meal-macros"><span class="tag tg">50g prot</span><span class="tag tb">40g carbs</span><span class="tag ta">15g grasas</span></div></div>
+    <div class="meal"><div class="meal-header"><div class="meal-name">Media mañana</div><div class="meal-time">11:30</div></div><div class="meal-title">Fruta + queso</div><div class="meal-items">• <b>Plátano + naranja</b><br>• <b>2 quesitos en porciones</b> o 50g queso fresco</div><div class="meal-macros"><span class="tag tg">12g prot</span><span class="tag tb">45g carbs</span><span class="tag ta">8g grasas</span></div></div>
+    <div class="meal alt1"><div class="meal-header"><div class="meal-name">Comida</div><div class="meal-time">14:00</div></div><div class="meal-title">Paella de pollo (día de cheat controlado)</div><div class="meal-items">• <b>200g pollo</b><br>• <b>Arroz de paella</b><br>• <b>Judías verdes, pimiento, tomate</b><br>• Azafrán o colorante, aceite</div><div class="meal-macros"><span class="tag tg">45g prot</span><span class="tag tb">90g carbs</span><span class="tag ta">14g grasas</span></div></div>
+    <div class="meal alt2"><div class="meal-header"><div class="meal-name">Merienda</div><div class="meal-time">17:00</div></div><div class="meal-title">Batido proteína + frutos secos</div><div class="meal-items">• <b>1 scoop whey</b> con leche<br>• <b>30g nueces o almendras</b></div><div class="meal-macros"><span class="tag tg">32g prot</span><span class="tag tb">12g carbs</span><span class="tag ta">18g grasas</span></div></div>
+    <div class="meal alt3"><div class="meal-header"><div class="meal-name">Cena</div><div class="meal-time">21:00</div></div><div class="meal-title">Tortilla de atún con ensalada</div><div class="meal-items">• <b>3 huevos + 2 latas atún</b><br>• <b>Ensalada variada grande</b><br>• <b>Pan integral (1 rebanada)</b></div><div class="meal-macros"><span class="tag tg">55g prot</span><span class="tag tb">22g carbs</span><span class="tag ta">14g grasas</span></div></div>
+    <div class="info ok" style="margin-top:4px;"><div class="info-icon">🎉</div><div>Domingo: comida libre controlada. Come lo que quieras al mediodía pero sigue con proteína alta. Mereces un descanso mental también.</div></div>
+  </div>
+
+  <div class="info imp" style="margin-top:8px;"><div class="info-icon">💊</div><div><b>Suplementos básicos:</b> Proteína whey (si no llegas a 160g con comida). Creatina monohidrato 5g/día en cualquier momento. Vitamina D3 si no te da el sol. Multivitamínico por las mañanas.</div></div>
+</div>
+
+<!-- ========= SECTION: PRODUCTOS ========= -->
+<div class="section" id="sec-productos">
+  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
+  <div class="sec-title">Lista de <span>compra</span></div>
+  <div class="info imp"><div class="info-icon">🛒</div><div>Todo lo que necesitas ordenado por prioridad. ESENCIAL = cómpralo ya. RECOMENDADO = cuando puedas. OPCIONAL = mejora extra.</div></div>
+
+  <div class="card"><div class="card-body" style="padding-top:8px;">
+    <div class="product-cat">💊 Suplementos</div>
+    <div class="product-item"><div class="product-emoji">🥤</div><div class="product-info"><div class="product-name">Proteína Whey</div><div class="product-brand">Myprotein Impact Whey / Amix / HSN</div><div class="product-use">1 scoop post-gym o cuando no llegas a 160g de proteína. Sabor chocolate o vainilla para empezar.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">⚡</div><div class="product-info"><div class="product-name">Creatina monohidrato</div><div class="product-brand">Myprotein Creatine Monohydrate / Prozis / HSN</div><div class="product-use">5g al día, cualquier momento, con agua o zumo. El suplemento más respaldado científicamente para fuerza y masa.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+    <div class="product-item"><div class="product-emoji">☀️</div><div class="product-info"><div class="product-name">Vitamina D3 2000 UI</div><div class="product-brand">Solgar / Now Foods / cualquier farmacia</div><div class="product-use">Si no te da mucho el sol. Mejora recuperación, inmunidad y estado de ánimo.</div></div><div class="product-prio prio-opt">OPCIONAL</div></div>
+
+    <div class="product-cat">🧴 Skincare facial — Básico</div>
+    <div class="product-item"><div class="product-emoji">🫧</div><div class="product-info"><div class="product-name">Limpiador facial suave</div><div class="product-brand">CeraVe Hydrating Cleanser o La Roche-Posay Effaclar</div><div class="product-use">Mañana y noche. El más importante de toda la rutina. Sin él nada más funciona bien.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">✨</div><div class="product-info"><div class="product-name">Sérum Vitamina C 10-15%</div><div class="product-brand">The Ordinary Vitamin C Suspension 23% o TruSkin Vitamin C</div><div class="product-use">Solo mañana. Aclara marcas, unifica tono, ilumina. Clave para piel clara como la tuya.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🌞</div><div class="product-info"><div class="product-name">Hidratante con SPF 30+</div><div class="product-brand">Isdin Fusion Water SPF 30 / Eucerin Sun Face / Heliocare</div><div class="product-use">Todos los días por la mañana. Protege del daño solar, previene manchas, cuida la piel a largo plazo.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">💧</div><div class="product-info"><div class="product-name">Niacinamida 10% + Zinc</div><div class="product-brand">The Ordinary Niacinamide 10% + Zinc 1%</div><div class="product-use">Cada noche. Cierra poros, reduce rojeces, unifica tono. Precio muy bajo, resultados muy altos.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🌙</div><div class="product-info"><div class="product-name">Hidratante noche sin SPF</div><div class="product-brand">Neutrogena Hydro Boost / CeraVe Moisturizing Cream</div><div class="product-use">Sella la rutina de noche. Hidrata mientras duermes.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+    <div class="product-item"><div class="product-emoji">🔄</div><div class="product-info"><div class="product-name">Retinol 0.2%</div><div class="product-brand">The Ordinary Retinol 0.2% in Squalane</div><div class="product-use">2-3 noches por semana solo. Mejora textura, marcas y piel a largo plazo. Empieza muy despacio.</div></div><div class="product-prio prio-opt">OPCIONAL</div></div>
+
+    <div class="product-cat">🦷 Higiene bucal</div>
+    <div class="product-item"><div class="product-emoji">👅</div><div class="product-info"><div class="product-name">Rascador de lengua</div><div class="product-brand">Cualquiera de acero inoxidable (Dr. Tung's, Amazon básico)</div><div class="product-use">PRIMERO siempre antes de cepillar. Elimina el 80% del mal aliento. Menos de 5 euros.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🪥</div><div class="product-info"><div class="product-name">Cepillo eléctrico</div><div class="product-brand">Oral-B Pro 2 / Oral-B Smart 4 / Philips Sonicare</div><div class="product-use">Limpia 100% mejor que manual. Antes de los brackets es el momento de acostumbrarte. Invierte aquí.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🧵</div><div class="product-info"><div class="product-name">Hilo dental</div><div class="product-brand">Oral-B Essential Floss / Listerine Ultraclean</div><div class="product-use">Cada noche mínimo. De donde más viene el olor. Hazlo siempre antes del enjuague.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🫙</div><div class="product-info"><div class="product-name">Enjuague clorhexidina 0.12% sin alcohol</div><div class="product-brand">Perio-Aid / Periokin / Clorhexil</div><div class="product-use">2 veces al día, 30 segundos. Cambia el aliento completamente en 3-5 días. Farmacia.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🦷</div><div class="product-info"><div class="product-name">Pasta de dientes con flúor</div><div class="product-brand">Colgate Total / Sensodyne / Oral-B Pro-Expert</div><div class="product-use">Con flúor siempre. Para encías sensibles, Sensodyne. Di al dentista el viernes que tienes mal aliento.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🍬</div><div class="product-info"><div class="product-name">Chicle xilitol sin azúcar</div><div class="product-brand">Trident / Orbit / cualquiera sin azúcar</div><div class="product-use">Entre comidas. Estimula saliva y neutraliza ácidos. Frena bacterias. No sustituye el cepillado.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+
+    <div class="product-cat">💪 Higiene corporal</div>
+    <div class="product-item"><div class="product-emoji">🧼</div><div class="product-info"><div class="product-name">Jabón antibacteriano</div><div class="product-brand">Safeguard / Lifebuoy / Sanex Zero Bacteria</div><div class="product-use">Para las axilas en la ducha. Frota 30-40 segundos reales. Base del protocolo anti-olor.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🛡️</div><div class="product-info"><div class="product-name">Antitranspirante clínico 72h</div><div class="product-brand">Rexona Clinical 72h / Sure Maximum Protection / Mitchum Clinical</div><div class="product-use">Aplicar DE NOCHE en axilas secas. No por la mañana. Cambia el juego completamente.</div></div><div class="product-prio prio-must">ESENCIAL</div></div>
+    <div class="product-item"><div class="product-emoji">🧽</div><div class="product-info"><div class="product-name">Guante exfoliante de baño</div><div class="product-brand">Cualquiera (Kessa, Amazon, Mercadona)</div><div class="product-use">2 veces por semana en todo el cuerpo. Elimina piel muerta, mejora textura, prepara para el bronceado.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+    <div class="product-item"><div class="product-emoji">🌿</div><div class="product-info"><div class="product-name">Crema hidratante corporal</div><div class="product-brand">Neutrogena Body / Nivea Men / Cerave Body</div><div class="product-use">Tras la ducha, piel ligeramente húmeda. Toda la absorción. Mejora textura y aspecto general.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+
+    <div class="product-cat">☀️ Bronceado y sol</div>
+    <div class="product-item"><div class="product-emoji">🌊</div><div class="product-info"><div class="product-name">Bronceador SPF 20-30</div><div class="product-brand">Isdin Fotoprotector SPF 20 / Garnier Ambre Solaire SPF 20</div><div class="product-use">Para broncearte sin dañar la piel. No uses SPF 50 si quieres coger color. Empieza con exposición gradual.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+    <div class="product-item"><div class="product-emoji">🌱</div><div class="product-info"><div class="product-name">Gel de aloe vera puro</div><div class="product-brand">Pampanga / Lily of the Desert / Mercadona bio</div><div class="product-use">Post-sol. Prolonga el bronceado, hidrata, calma. 100% aloe vera, sin alcohol.</div></div><div class="product-prio prio-rec">RECOMENDADO</div></div>
+    <div class="product-item"><div class="product-emoji">🥕</div><div class="product-info"><div class="product-name">Cápsulas beta-caroteno</div><div class="product-brand">Solgar Beta-Carotene / Farmacia genérica</div><div class="product-use">Tono dorado desde dentro. Empieza 3-4 semanas antes del verano. Opcional pero muy efectivo.</div></div><div class="product-prio prio-opt">OPCIONAL</div></div>
+  </div></div>
+</div>
+
+
+
+<!-- ========= SECTION: COACH ========= -->
+<div class="section" id="sec-coach">
+  <div class="sec-title">Coach <span>IA</span> <span class="mode-pill mode-normal" id="mode-pill">Normal</span></div>
+  <div class="info imp"><div class="info-icon">🤖</div><div><b>100% gratis</b> — funciona sin internet. Experto en gym, dieta, skincare e higiene. Se adapta a tu día.</div></div>
+  <div class="quick-chips" id="quick-chips"></div>
+  <div class="card chat-wrap">
+    <div class="card-body" style="display:flex;flex-direction:column;height:100%;padding:12px;">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chat-input" placeholder="Ej: hoy estoy fuera de casa..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION: MÁS ========= -->
+<div class="section" id="sec-mas">
+  <div class="sec-title">Más <span>opciones</span></div>
+  <div class="mas-grid">
+    <div class="mas-tile" onclick="openFromMas('dieta')"><div class="mas-tile-icon">🥗</div><div class="mas-tile-lbl">Dieta</div></div>
+    <div class="mas-tile" onclick="openFromMas('progreso')"><div class="mas-tile-icon">📈</div><div class="mas-tile-lbl">Progreso</div></div>
+    <div class="mas-tile" onclick="openFromMas('productos')"><div class="mas-tile-icon">🛒</div><div class="mas-tile-lbl">Compras</div></div>
+    <div class="mas-tile" onclick="openFromMas('ajustes')"><div class="mas-tile-icon">⚙️</div><div class="mas-tile-lbl">Ajustes</div></div>
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <div class="card-body">
+      <div class="step-title" style="margin-bottom:8px;">📱 Instalar en iPhone</div>
+      <div class="step-desc" style="line-height:1.7;">1. Abre esta app en <b>Safari</b> (no Chrome)<br>2. Toca <b>Compartir</b> ↑<br>3. <b>Añadir a pantalla de inicio</b><br>4. Listo — icono como app nativa, gratis para siempre.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========= SECTION: AJUSTES ========= -->
+<div class="section" id="sec-ajustes">
+  <div class="back-bar visible" id="back-ajustes" onclick="showSection('mas')">← Volver</div>
+  <div class="sec-title">Ajustes <span>personales</span></div>
+  <div class="card"><div class="card-body">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;">METAS DIARIAS</div>
+    <div class="form-row">
+      <input type="number" class="form-input" id="set-protein" placeholder="Proteína (g)" value="160">
+      <input type="number" class="form-input" id="set-water" placeholder="Agua (ml)" value="3000">
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin:16px 0 10px;">MODO DEL DÍA</div>
+    <div class="tracker-btns">
+      <button class="tracker-btn" onclick="setDayMode('normal')">🏠 En casa</button>
+      <button class="tracker-btn" onclick="setDayMode('away')">✈️ Fuera</button>
+      <button class="tracker-btn" onclick="setDayMode('rest')">😴 Descanso</button>
+    </div>
+    <button class="form-btn" style="width:100%;margin-top:14px;" onclick="saveProfile()">Guardar ajustes</button>
+    <button class="reset-btn" style="margin-top:10px;" onclick="if(confirm('¿Borrar todos los datos?'))clearAllData()">Borrar todos los datos</button>
+  </div></div>
+</div>
+
+
+<!-- ========= SECTION: PROGRESO ========= -->
+<div class="section" id="sec-progreso">
+  <div class="back-bar visible" onclick="showSection('mas')">← Volver</div>
+  <div class="sec-title">
+  <div class="sec-title">Mi <span>progreso</span></div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-green">⚖️</div><div><div class="card-title">Peso corporal</div><div class="card-sub">Seguimiento semanal</div></div></div>
+    <div class="card-body">
+      <div class="form-row">
+        <input type="number" step="0.1" class="form-input" id="weight-input" placeholder="kg ej: 72.5">
+        <button class="form-btn" onclick="addWeight()">Guardar</button>
+      </div>
+      <div class="chart-bars" id="weight-chart"></div>
+      <div id="weight-list"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-purple">📏</div><div><div class="card-title">Medidas corporales</div><div class="card-sub">cm — cada 2 semanas</div></div></div>
+    <div class="card-body">
+      <div class="form-row">
+        <input type="number" step="0.1" class="form-input" id="m-chest" placeholder="Pecho">
+        <input type="number" step="0.1" class="form-input" id="m-arm" placeholder="Brazo">
+      </div>
+      <div class="form-row">
+        <input type="number" step="0.1" class="form-input" id="m-waist" placeholder="Cintura">
+        <input type="number" step="0.1" class="form-input" id="m-thigh" placeholder="Muslo">
+      </div>
+      <button class="form-btn" style="width:100%;" onclick="addMeasurement()">Guardar medidas</button>
+      <div id="measure-list" style="margin-top:12px;"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-amber">📊</div><div><div class="card-title">Resumen semanal</div></div></div>
+    <div class="card-body">
+      <div class="step-item"><div class="step-num">🏋️</div><div class="step-content"><div class="step-title">Entrenos</div><div class="step-desc" id="sum-gym">0 / 5</div></div></div>
+      <div class="step-item"><div class="step-num">✓</div><div class="step-content"><div class="step-title">Días hábitos completos</div><div class="step-desc" id="sum-habits">0</div></div></div>
+      <div class="step-item"><div class="step-num">🔥</div><div class="step-content"><div class="step-title">Racha</div><div class="step-desc" id="sum-streak">0 días</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-icon ci-pink">📝</div><div><div class="card-title">Notas</div></div></div>
+    <div class="card-body">
+      <textarea class="gym-log-input" id="progress-notes" rows="3" placeholder="Cambios que notas, energía, sueño..." oninput="saveNotes()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- NAV BAR -->
+<nav class="nav">
+  <button class="nav-btn active" id="nav-hoy" onclick="showSection('hoy')">
+    <div class="nav-icon">🏠</div>Hoy
+  </button>
+  <button class="nav-btn" id="nav-coach" onclick="showSection('coach')">
+    <div class="nav-icon">🤖</div>Coach
+  </button>
+  <button class="nav-btn" id="nav-rutina" onclick="showSection('rutina')">
+    <div class="nav-icon">⏰</div>Rutina
+  </button>
+  <button class="nav-btn" id="nav-gym" onclick="showSection('gym')">
+    <div class="nav-icon">🏋️</div>Gym
+  </button>
+  <button class="nav-btn" id="nav-mas" onclick="showSection('mas')">
+    <div class="nav-icon">⋯</div>Más
+  </button>
+</nav>
+
+<script>
+const STORAGE = 'mr_';
+const WATER_GOAL_KEY = 'waterGoal';
+const PROTEIN_GOAL_KEY = 'proteinGoal';
+const HABIT_COUNT = 7;
+const RING_CIRC = 175.9;
+
+let wakeHour = null;
+let wakeMinute = 0;
+let lastDayKey = null;
+let timerSeconds = 120;
+let timerInterval = null;
+let timerRunning = false;
+
+const gymDays = ['Push — pecho, hombros y tríceps','Pull — espalda y bíceps','Pierna completa','Push 2 — variante','Pull 2 — variante','Descanso activo','Descanso activo'];
+
+function todayKey() {
+  const n = new Date();
+  return n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate());
+}
+
+function loadJSON(key, def) {
+  try {
+    const v = localStorage.getItem(STORAGE + key);
+    return v ? JSON.parse(v) : def;
+  } catch (e) { return def; }
+}
+
+function saveJSON(key, val) {
+  localStorage.setItem(STORAGE + key, JSON.stringify(val));
+}
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function getProfile() {
+  return loadJSON('profile', {
+    proteinGoal: 160,
+    waterGoal: 3000,
+    dayMode: 'normal',
+    age: 16,
+    height: 1.8
+  });
+}
+
+function getWaterGoal() { return getProfile().waterGoal || 3000; }
+function getProteinGoal() { return getProfile().proteinGoal || 160; }
+
+function getWakeToday() {
+  return loadJSON('wake_' + todayKey(), null);
+}
+
+function isAwakeToday() {
+  const w = getWakeToday();
+  return w && typeof w.h === 'number';
+}
+
+function confirmWake() {
+  const now = new Date();
+  wakeHour = now.getHours();
+  wakeMinute = now.getMinutes();
+  saveJSON('wake_' + todayKey(), { h: wakeHour, m: wakeMinute });
+  hideWakeOverlay();
+  updateWakeUI();
+  buildTimelines();
+  if (navigator.vibrate) navigator.vibrate(50);
+}
+
+function hideWakeOverlay() {
+  const o = document.getElementById('wake-overlay');
+  if (o) o.classList.add('hidden');
+}
+
+function showWakeOverlay() {
+  const o = document.getElementById('wake-overlay');
+  if (o) o.classList.remove('hidden');
+}
+
+function updateWakeUI() {
+  const btn = document.getElementById('wake-btn');
+  const st = document.getElementById('wake-status');
+  const w = getWakeToday();
+  if (w) {
+    wakeHour = w.h;
+    wakeMinute = w.m || 0;
+    if (btn) {
+      btn.classList.add('done');
+      btn.textContent = '✓ Despertaste a las ' + fmt(w.h, w.m);
+      btn.onclick = function () {
+        if (confirm('¿Registrar de nuevo tu despertar ahora?')) confirmWake();
+      };
+    }
+    if (st) st.textContent = 'Rutina calculada desde las ' + fmt(w.h, w.m);
+    hideWakeOverlay();
+  } else {
+    wakeHour = null;
+    if (btn) {
+      btn.classList.remove('done');
+      btn.textContent = '☀️ ¡Me he despertado!';
+      btn.onclick = confirmWake;
+    }
+    if (st) st.textContent = 'Pulsa al despertar — nuevo día desde las 00:00';
+    showWakeOverlay();
+  }
+}
+
+function loadWake() {
+  updateWakeUI();
+}
+
+function checkMidnightReset() {
+  const today = todayKey();
+  if (lastDayKey === null) lastDayKey = loadJSON('lastDay', today);
+  if (lastDayKey !== today) {
+    onNewDay(lastDayKey, today);
+    lastDayKey = today;
+    saveJSON('lastDay', today);
+  }
+}
+
+function onNewDay(prev, today) {
+  wakeHour = null;
+  wakeMinute = 0;
+  showWakeOverlay();
+  updateWakeUI();
+  setGreeting();
+  setHeroDate();
+  updateTrackers();
+  updateHabitUI();
+  updateNowCard();
+  updateModePill();
+  const gymLog = document.getElementById('gym-log-today');
+  if (gymLog) gymLog.value = '';
+  initChat();
+}
+
+function tick() {
+  checkMidnightReset();
+  const now = new Date();
+  document.getElementById('clock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  if (isAwakeToday()) updateNowCard();
+}
+
+tick();
+setInterval(tick, 15000);
+
+function setGreeting() {
+  const h = new Date().getHours();
+  let g = 'Buenas noches';
+  if (h >= 5 && h < 12) g = 'Buenos días';
+  else if (h >= 12 && h < 20) g = 'Buenas tardes';
+  const el = document.getElementById('hero-greeting');
+  if (el) el.textContent = g + ' 👋';
+}
+
+function setHeroDate() {
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const now = new Date();
+  const wd = now.getDay();
+  document.getElementById('hero-date').textContent = days[wd] + ', ' + now.getDate() + ' de ' + months[now.getMonth()];
+  const el = document.getElementById('habit-gym-day');
+  if (el) el.textContent = gymDays[wd];
+}
+
+function fmt(h, m) {
+  if (h === null || h === undefined) return '--:--';
+  let hh = h, mm = m || 0;
+  if (mm >= 60) { hh += Math.floor(mm / 60); mm = mm % 60; }
+  hh = ((hh % 24) + 24) % 24;
+  return pad(hh) + ':' + pad(mm);
+}
+
+function addMins(h, m, add) {
+  let total = h * 60 + (m || 0) + add;
+  return { h: Math.floor(total / 60) % 24, m: total % 60 };
+}
+
+function timeToMins(str) {
+  if (!str || str === '--:--') return 9999;
+  const p = str.split(':');
+  return parseInt(p[0], 10) * 60 + parseInt(p[1], 10);
+}
+
+function scheduleOffset(mins) {
+  if (!isAwakeToday()) return '--:--';
+  const t = addMins(wakeHour, wakeMinute, mins);
+  return fmt(t.h, t.m);
+}
+
+function getSchedule() {
+  if (!isAwakeToday()) return [];
+  const profile = getProfile();
+  const away = profile.dayMode === 'away';
+  const rest = profile.dayMode === 'rest';
+  const wd = new Date().getDay();
+  const isGym = wd >= 1 && wd <= 5 && !rest;
+
+  const base = [
+    { t: scheduleOffset(0), title: '💧 Agua al despertar', desc: '400-500ml ahora. Meta: ' + (getWaterGoal() / 1000) + 'L hoy.' },
+    { t: scheduleOffset(5), title: '🦷 Higiene bucal', desc: 'Rascador → cepillo → hilo → enjuague.' },
+    { t: scheduleOffset(12), title: '✨ Skincare mañana', desc: away ? 'Limpiador + SPF mínimo (viaje)' : 'Limpiador → Vit C → SPF 30.' },
+    { t: scheduleOffset(20), title: '🚿 Ducha', desc: 'Jabón antibacterial en axilas 30 seg.' },
+    { t: scheduleOffset(35), title: '🍳 Desayuno', desc: away ? 'Proteína alta: huevos, yogur, o bocadillo pavo' : 'Alto en proteína. Ver Dieta.' },
+    { t: scheduleOffset(150), title: '🥗 Media mañana', desc: 'Yogur griego + frutos secos o barrita proteica.' },
+    { t: scheduleOffset(270), title: '🍚 Comida', desc: away ? 'Pollo/pescado + arroz. Evita frituras' : 'Comida principal. Ver Dieta.' },
+  ];
+
+  if (isGym && !away) {
+    base.push(
+      { t: scheduleOffset(450), title: '🏋️ Pre-gym', desc: 'Snack 30 min antes.' },
+      { t: scheduleOffset(480), title: '💪 Gimnasio', desc: gymDays[wd] + ' — 60-75 min.' },
+      { t: scheduleOffset(570), title: '🥤 Post-gym', desc: 'Whey + carbos en 30-60 min.' }
+    );
+  } else if (away) {
+    base.push({ t: scheduleOffset(480), title: '💪 Movimiento', desc: 'Hotel gym, flexiones o caminata 30 min.' });
+  } else {
+    base.push({ t: scheduleOffset(480), title: '🚶 Actividad', desc: 'Paseo, estiramientos o descanso activo.' });
+  }
+
+  base.push(
+    { t: scheduleOffset(720), title: '🍽️ Cena', desc: 'Proteína + verduras. Cierra proteína del día.' },
+    { t: scheduleOffset(810), title: '🌙 Skincare noche', desc: 'Limpiador → Niacinamida → hidratante.' },
+    { t: scheduleOffset(825), title: '🦷 Higiene noche', desc: 'Rutina completa con hilo.' },
+    { t: scheduleOffset(840), title: '🛡️ Antitranspirante', desc: 'Axilas secas. De noche.' },
+    { t: scheduleOffset(900), title: '😴 Dormir', desc: '8-9h. Teléfono boca abajo 1h antes.' }
+  );
+  return base;
+}
+
+function updateNowCard() {
+  const title = document.getElementById('now-title');
+  const time = document.getElementById('now-time');
+  const desc = document.getElementById('now-desc');
+  if (!title) return;
+
+  if (!isAwakeToday()) {
+    title.textContent = 'Pulsa «Me he despertado»';
+    time.textContent = 'Arriba en el header';
+    desc.textContent = 'Tu rutina del día (comidas, gym, skincare) se calcula desde el momento en que despiertas.';
+    return;
+  }
+
+  const schedule = getSchedule();
+  const curMins = new Date().getHours() * 60 + new Date().getMinutes();
+  let next = schedule[schedule.length - 1];
+  for (const item of schedule) {
+    if (timeToMins(item.t) > curMins) { next = item; break; }
+  }
+  const allDone = timeToMins(schedule[schedule.length - 1].t) <= curMins;
+  title.textContent = allDone ? '¡Día completado! 🎉' : next.title;
+  time.textContent = allDone ? 'Descansa bien' : ('A las ' + next.t);
+  desc.textContent = allDone ? 'Mañana nuevo día a las 00:00.' : next.desc;
+}
+
+function tli(time, title, desc) {
+  return '<div class="timeline-item"><div class="tl-time">' + time + '</div><div class="tl-dot"></div><div class="tl-content"><div class="tl-title">' + title + '</div><div class="tl-desc">' + desc + '</div></div></div>';
+}
+
+function buildTimelines() {
+  const sub = document.getElementById('morning-sub');
+  if (!isAwakeToday()) {
+    if (sub) sub.textContent = 'Despierta para ver horarios';
+    ['morning-timeline','afternoon-timeline','night-timeline'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<p style="font-size:12px;color:var(--muted);padding:8px 0;">Pulsa «Me he despertado» cuando te levantes.</p>';
+    });
+    updateNowCard();
+    return;
+  }
+
+  if (sub) sub.textContent = 'Desde las ' + fmt(wakeHour, wakeMinute);
+  const s = getSchedule();
+  const morning = s.slice(0, 5);
+  const afternoon = s.slice(5, s.length - 5);
+  const night = s.slice(-5);
+
+  document.getElementById('morning-timeline').innerHTML = morning.map(a => tli(a.t, a.title, a.desc)).join('');
+  document.getElementById('afternoon-timeline').innerHTML = afternoon.map(a => tli(a.t, a.title, a.desc)).join('');
+  document.getElementById('night-timeline').innerHTML = night.map(a => tli(a.t, a.title, a.desc)).join('');
+
+  const w = wakeHour;
+  ['d0','d1','d2','d3','d4','d5','d6'].forEach(d => {
+    const el = document.getElementById(d + '-des');
+    if (el) el.textContent = scheduleOffset(35);
+    const mm = document.getElementById(d + '-mm');
+    if (mm) mm.textContent = scheduleOffset(150);
+    const pg = document.getElementById(d + '-pg');
+    if (pg) pg.textContent = scheduleOffset(isAwakeToday() && new Date().getDay() >= 1 && new Date().getDay() <= 5 ? 570 : 480);
+  });
+  updateNowCard();
+}
+
+function getWater() { return loadJSON('water_' + todayKey(), 0); }
+function getProtein() { return loadJSON('protein_' + todayKey(), 0); }
+
+function updateTrackers() {
+  const wg = getWaterGoal(), pg = getProteinGoal();
+  const water = getWater(), protein = getProtein();
+  document.getElementById('water-val').textContent = water + ' / ' + wg + ' ml';
+  document.getElementById('water-fill').style.width = Math.min(100, water / wg * 100) + '%';
+  document.getElementById('protein-val').textContent = protein + ' / ' + pg + ' g';
+  document.getElementById('protein-fill').style.width = Math.min(100, protein / pg * 100) + '%';
+  document.getElementById('stat-water').textContent = (water / 1000).toFixed(1) + 'L';
+  document.getElementById('stat-protein').textContent = protein + 'g';
+  if (water >= wg) markHabitByIndex(0);
+  if (protein >= pg) markHabitByIndex(3);
+}
+
+function addWater(ml) { saveJSON('water_' + todayKey(), Math.max(0, getWater() + ml)); updateTrackers(); }
+function setWater(v) { saveJSON('water_' + todayKey(), v); updateTrackers(); }
+function addProtein(g) { saveJSON('protein_' + todayKey(), Math.max(0, getProtein() + g)); updateTrackers(); }
+
+function getHabitsDone() { return loadJSON('habits_' + todayKey(), []); }
+function saveHabitsDone(arr) { saveJSON('habits_' + todayKey(), arr); updateHabitUI(); updateStreak(); updateSummary(); }
+
+function toggleHabit(el) {
+  const idx = parseInt(el.dataset.habit, 10);
+  let done = getHabitsDone();
+  done = done.includes(idx) ? done.filter(i => i !== idx) : done.concat([idx]);
+  saveHabitsDone(done);
+}
+
+function markHabitByIndex(idx) {
+  const done = getHabitsDone();
+  if (!done.includes(idx)) saveHabitsDone(done.concat([idx]));
+}
+
+function updateHabitUI() {
+  const done = getHabitsDone();
+  document.querySelectorAll('.habit-item[data-habit]').forEach(el => {
+    const idx = parseInt(el.dataset.habit, 10);
+    const isDone = done.includes(idx);
+    el.classList.toggle('done', isDone);
+    el.querySelector('.habit-check').textContent = isDone ? '✓' : '';
+  });
+  const pct = Math.round(done.length / HABIT_COUNT * 100);
+  document.getElementById('habit-pct').textContent = pct + '%';
+  document.getElementById('stat-habits').textContent = pct + '%';
+  const ring = document.getElementById('habit-ring');
+  if (ring) ring.style.strokeDashoffset = RING_CIRC - (RING_CIRC * pct / 100);
+}
+
+function resetHabits() {
+  saveHabitsDone([]);
+  saveJSON('water_' + todayKey(), 0);
+  saveJSON('protein_' + todayKey(), 0);
+  updateTrackers();
+}
+
+function updateStreak() {
+  let streak = loadJSON('streak', { count: 0, lastDate: '' });
+  const today = todayKey();
+  if (getHabitsDone().length >= 5) {
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    const yKey = y.getFullYear() + '-' + pad(y.getMonth() + 1) + '-' + pad(y.getDate());
+    if (streak.lastDate !== today) {
+      streak.count = (streak.lastDate === yKey) ? streak.count + 1 : 1;
+      streak.lastDate = today;
+      saveJSON('streak', streak);
+    }
+  }
+  document.getElementById('streak-badge').textContent = '🔥 ' + streak.count + ' días seguidos';
+  const ss = document.getElementById('sum-streak');
+  if (ss) ss.textContent = streak.count + ' días';
+}
+
+function setTimerPreset(sec, btn) {
+  timerSeconds = sec; timerRunning = false; clearInterval(timerInterval);
+  document.querySelectorAll('.timer-preset').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  updateTimerDisplay();
+  document.getElementById('timer-btn').textContent = 'Iniciar';
+}
+
+function updateTimerDisplay() {
+  document.getElementById('timer-display').textContent = Math.floor(timerSeconds / 60) + ':' + pad(timerSeconds % 60);
+}
+
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval); timerRunning = false;
+    document.getElementById('timer-btn').textContent = 'Reanudar';
+    return;
+  }
+  timerRunning = true;
+  document.getElementById('timer-btn').textContent = 'Pausar';
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval); timerRunning = false;
+      document.getElementById('timer-btn').textContent = 'Iniciar';
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  timerSeconds = 120; timerRunning = false; clearInterval(timerInterval);
+  updateTimerDisplay();
+  document.getElementById('timer-btn').textContent = 'Iniciar';
+}
+
+function saveGymLog() {
+  const el = document.getElementById('gym-log-today');
+  if (!el) return;
+  saveJSON('gymlog_' + todayKey(), el.value);
+  const wd = new Date().getDay();
+  if (wd >= 1 && wd <= 5 && el.value.trim()) markHabitByIndex(4);
+}
+
+function addWeight() {
+  const kg = parseFloat(document.getElementById('weight-input').value);
+  if (!kg || kg < 30 || kg > 200) { alert('Peso válido: 30-200 kg'); return; }
+  let logs = loadJSON('weights', []);
+  logs.push({ date: todayKey(), kg });
+  saveJSON('weights', logs.slice(-20));
+  document.getElementById('weight-input').value = '';
+  renderWeights();
+}
+
+function renderWeights() {
+  const logs = loadJSON('weights', []);
+  const list = document.getElementById('weight-list');
+  const chart = document.getElementById('weight-chart');
+  if (!list) return;
+  if (!logs.length) {
+    list.innerHTML = '<p style="font-size:12px;color:var(--muted)">Sin registros</p>';
+    if (chart) chart.innerHTML = '';
+    return;
+  }
+  const max = Math.max(...logs.map(l => l.kg)), min = Math.min(...logs.map(l => l.kg)), range = max - min || 1;
+  if (chart) chart.innerHTML = logs.slice(-8).map(l => {
+    const ht = Math.max(15, ((l.kg - min) / range) * 70 + 15);
+    return '<div class="chart-bar-wrap"><div class="chart-bar" style="height:' + ht + 'px"></div><div class="chart-lbl">' + l.date.slice(5) + '</div></div>';
+  }).join('').split('div').join('div');
+  list.innerHTML = logs.slice().reverse().slice(0, 5).map(l =>
+    '<div class="log-entry"><span class="log-date">' + l.date + '</span><span class="log-val">' + l.kg + ' kg</span></div>'
+  ).join('');
+}
+
+function addMeasurement() {
+  const m = {
+    date: todayKey(),
+    chest: parseFloat(document.getElementById('m-chest').value) || null,
+    arm: parseFloat(document.getElementById('m-arm').value) || null,
+    waist: parseFloat(document.getElementById('m-waist').value) || null,
+    thigh: parseFloat(document.getElementById('m-thigh').value) || null
+  };
+  if (!m.chest && !m.arm && !m.waist && !m.thigh) { alert('Al menos una medida'); return; }
+  let logs = loadJSON('measures', []); logs.push(m); saveJSON('measures', logs);
+  ['m-chest','m-arm','m-waist','m-thigh'].forEach(id => document.getElementById(id).value = '');
+  renderMeasures();
+}
+
+function renderMeasures() {
+  const logs = loadJSON('measures', []);
+  const el = document.getElementById('measure-list');
+  if (!el) return;
+  el.innerHTML = logs.length ? logs.slice().reverse().slice(0, 4).map(m =>
+    '<div class="log-entry"><span class="log-date">' + m.date + '</span><span class="log-val">P:' + (m.chest || '—') + ' B:' + (m.arm || '—') + ' C:' + (m.waist || '—') + '</span></div>'
+  ).join('') : '<p style="font-size:12px;color:var(--muted)">Sin medidas</p>';
+}
+
+function saveNotes() {
+  const el = document.getElementById('progress-notes');
+  if (el) saveJSON('notes', el.value);
+}
+
+function updateSummary() {
+  let gymCount = 0, habitDays = 0;
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const k = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+    if (loadJSON('gymlog_' + k, '').trim()) gymCount++;
+    if (loadJSON('habits_' + k, []).length >= 5) habitDays++;
+  }
+  const sg = document.getElementById('sum-gym'), sh = document.getElementById('sum-habits');
+  if (sg) sg.textContent = gymCount + ' / 5 esta semana';
+  if (sh) sh.textContent = habitDays + ' días con 5+ hábitos';
+}
+
+function setDayMode(mode) {
+  const p = getProfile();
+  p.dayMode = mode;
+  saveJSON('profile', p);
+  updateModePill();
+  buildTimelines();
+  if (typeof Coach !== 'undefined') Coach.saveDayMode(mode);
+}
+
+function updateModePill() {
+  const pill = document.getElementById('mode-pill');
+  if (!pill) return;
+  const m = getProfile().dayMode || 'normal';
+  const labels = { normal: 'Normal', away: 'Fuera', rest: 'Descanso' };
+  pill.textContent = labels[m] || 'Normal';
+  pill.className = 'mode-pill mode-' + m;
+}
+
+function saveProfile() {
+  const p = getProfile();
+  p.proteinGoal = parseInt(document.getElementById('set-protein').value, 10) || 160;
+  p.waterGoal = parseInt(document.getElementById('set-water').value, 10) || 3000;
+  saveJSON('profile', p);
+  updateTrackers();
+  alert('Ajustes guardados');
+}
+
+function clearAllData() {
+  Object.keys(localStorage).filter(k => k.startsWith(STORAGE)).forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+
+function openFromMas(sec) { showSection(sec); }
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  const nav = document.getElementById('nav-' + name);
+  if (nav) nav.classList.add('active');
+  else if (['dieta','progreso','productos','ajustes'].includes(name)) {
+    const mas = document.getElementById('nav-mas');
+    if (mas) mas.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+  if (name === 'progreso') { renderWeights(); renderMeasures(); updateSummary(); }
+  if (name === 'coach') initChat();
+  if (name === 'ajustes') loadSettingsForm();
+}
+
+function loadSettingsForm() {
+  const p = getProfile();
+  const sp = document.getElementById('set-protein');
+  const sw = document.getElementById('set-water');
+  if (sp) sp.value = p.proteinGoal;
+  if (sw) sw.value = p.waterGoal;
+}
+
+function showGymDay(i) {
+  document.querySelectorAll('.gym-day').forEach(d => d.classList.remove('active'));
+  document.getElementById('gym-' + i).classList.add('active');
+  document.querySelectorAll('#gym-tabs .day-tab').forEach((t, ti) => t.classList.toggle('active', ti === i));
+}
+
+function showDietDay(i) {
+  document.querySelectorAll('.diet-day').forEach(d => d.classList.remove('active'));
+  document.getElementById('diet-' + i).classList.add('active');
+  document.querySelectorAll('#diet-tabs .day-tab').forEach((t, ti) => t.classList.toggle('active', ti === i));
+}
+
+function getCoachState() {
+  const w = getWakeToday();
+  const streak = loadJSON('streak', { count: 0 });
+  return {
+    wakeStr: w ? fmt(w.h, w.m) : 'no despertaste aún',
+    water: getWater(),
+    protein: getProtein(),
+    habitsDone: getHabitsDone().length,
+    streak: streak.count
+  };
+}
+
+function addChatMsg(text, isUser) {
+  const box = document.getElementById('chat-messages');
+  if (!box) return;
+  const d = document.createElement('div');
+  d.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+  d.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/
+/g, '<br>');
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendChat(text) {
+  const input = document.getElementById('chat-input');
+  const msg = (text || (input && input.value) || '').trim();
+  if (!msg) return;
+  if (input) input.value = '';
+  addChatMsg(msg, true);
+  const history = loadJSON('chat_' + todayKey(), []);
+  history.push({ role: 'user', text: msg });
+  let reply = 'Coach no disponible.';
+  if (typeof Coach !== 'undefined') {
+    reply = Coach.getReply(msg, getProfile(), getCoachState());
+  }
+  history.push({ role: 'bot', text: reply });
+  saveJSON('chat_' + todayKey(), history.slice(-40));
+  setTimeout(() => addChatMsg(reply, false), 300);
+  updateModePill();
+  buildTimelines();
+}
+
+function initChat() {
+  const chips = document.getElementById('quick-chips');
+  if (chips && !chips.dataset.done && typeof Coach !== 'undefined') {
+    chips.dataset.done = '1';
+    Coach.getQuickReplies().forEach(q => {
+      const b = document.createElement('button');
+      b.className = 'quick-chip';
+      b.textContent = q;
+      b.onclick = () => sendChat(q);
+      chips.appendChild(b);
+    });
+  }
+  const box = document.getElementById('chat-messages');
+  if (!box || box.dataset.loaded) return;
+  box.dataset.loaded = '1';
+  const history = loadJSON('chat_' + todayKey(), []);
+  if (!history.length) {
+    addChatMsg('¡Hola! Soy tu Coach personal. Pregúntame sobre gym, comida, piel, o dime si **estás fuera de casa** — adapto todo.', false);
+  } else {
+    history.forEach(h => addChatMsg(h.text, h.role === 'user'));
+  }
+}
+
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+  document.body.classList.add('standalone');
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+lastDayKey = loadJSON('lastDay', todayKey());
+checkMidnightReset();
+loadWake();
+buildTimelines();
+setGreeting();
+setHeroDate();
+updateTrackers();
+updateHabitUI();
+updateStreak();
+updateSummary();
+updateModePill();
+initChat();
+loadSettingsForm();
+
+const gymLogEl = document.getElementById('gym-log-today');
+if (gymLogEl) gymLogEl.value = loadJSON('gymlog_' + todayKey(), '');
+const notesEl = document.getElementById('progress-notes');
+if (notesEl) notesEl.value = loadJSON('notes', '');
+renderWeights();
+renderMeasures();
+updateTimerDisplay();
+
+const wd = new Date().getDay();
+const gymMap = { 1: 0, 2: 1, 3: 2, 4: 3, 5: 4 };
+if (gymMap[wd] !== undefined) showGymDay(gymMap[wd]);
+showDietDay(wd === 0 ? 6 : wd - 1);
+
+const dietTabs = document.querySelector('.day-tabs:not(#gym-tabs)');
+if (dietTabs && !dietTabs.id) dietTabs.id = 'diet-tabs';
+
+</script>
+</body>
+</html>
