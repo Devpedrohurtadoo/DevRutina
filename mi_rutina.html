@@ -623,8 +623,9 @@ hl { color: var(--accent2); font-weight: 600; }
 <div class="section active" id="sec-hoy">
   <div class="hero">
     <div class="hero-greeting">Buenas 👋</div>
-    <div class="hero-name">Tu día de hoy</div>
+    <div class="hero-name">Tu día de hipertrofia</div>
     <div class="hero-date" id="hero-date">Cargando...</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.45;">💪 Rutina <b>hipertrofia</b>: pesado 5-8 reps, progresión semanal. Come 160g+ proteína y duerme 8-9h.</p>
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hero-stat-val">16</div>
@@ -691,9 +692,11 @@ hl { color: var(--accent2); font-weight: 600; }
         <div class="tracker-bar"><div class="tracker-fill" id="steps-fill" style="width:0%;background:var(--teal);"></div></div>
         <div class="tracker-btns">
           <button type="button" class="tracker-btn" id="steps-toggle-btn" data-action="steps-toggle">▶ Activar contador</button>
+          <button type="button" class="tracker-btn sm" data-action="steps-add" data-steps="500">+500</button>
+          <button type="button" class="tracker-btn sm" data-action="steps-reset">Reiniciar hoy</button>
         </div>
         <div class="steps-status" id="steps-status"></div>
-        <p class="steps-hint">Automático con el sensor al caminar (app abierta). Para pasos 24h desde Salud: Atajo iOS → abrir URL con ?sync_steps=TUS_PASOS</p>
+        <p class="steps-hint"><b>Uso:</b> Activa → móvil en el <b>bolsillo</b> → camina. Calibra 2,5 s (no cuenta si lo mueves en la mano). Salud 24h: Atajo iOS con ?sync_steps=</p>
       </div>
     </div>
   </div>

@@ -88,10 +88,7 @@ function confirmWake() {
   buildTimelines();
   updateAhoraToca();
   updateTrackers();
-  if (typeof StepCounter !== 'undefined') {
-    const pr = StepCounter.start();
-    if (pr && typeof pr.then === 'function') pr.catch(function () {});
-  }
+  /* Pasos: activar manualmente al caminar (bolsillo) — evita falsos al usar el móvil en la cama */
 }
 
 function browseAppNow() {
@@ -541,7 +538,24 @@ function bindEvents() {
     if (act === 'snooze') { e.preventDefault(); scheduleSnooze(parseInt(t.getAttribute('data-min'), 10)); return; }
     if (act === 'water') { e.preventDefault(); addWater(parseInt(t.getAttribute('data-ml'), 10)); return; }
     if (act === 'protein') { e.preventDefault(); addProtein(parseInt(t.getAttribute('data-g'), 10)); return; }
-    if (act === 'steps-toggle') { e.preventDefault(); if (typeof StepCounter !== 'undefined') StepCounter.toggle(); return; }
+    if (act === 'steps-toggle') {
+      e.preventDefault();
+      if (typeof StepCounter !== 'undefined') {
+        const r = StepCounter.toggle();
+        if (r && typeof r.then === 'function') r.catch(function () {});
+      }
+      return;
+    }
+    if (act === 'steps-add') {
+      e.preventDefault();
+      if (typeof StepCounter !== 'undefined') StepCounter.addSteps(parseInt(t.getAttribute('data-steps'), 10) || 0);
+      return;
+    }
+    if (act === 'steps-reset') {
+      e.preventDefault();
+      if (typeof StepCounter !== 'undefined' && confirm('¿Reiniciar los pasos de hoy a 0?')) StepCounter.resetToday();
+      return;
+    }
     if (act === 'timer-start') { e.preventDefault(); startTimer(); return; }
     if (act === 'timer-pause') { e.preventDefault(); pauseTimer(); return; }
     if (act === 'timer-reset') { e.preventDefault(); resetTimer(); return; }
